@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
-
+    [SerializeField] GameObject Player;
     public string[] sceneNames;
     private int currentSceneIndex = 0;
 
@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject); // No destruir al cambiar de escena
+            SceneManager.sceneLoaded += OnSceneLoaded;
         }
         else
         {
@@ -30,11 +31,34 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void LoadNextScene()
+    public void LoadNextScene()
     {
         if (sceneNames.Length == 0) return;
 
         currentSceneIndex = (currentSceneIndex + 1) % sceneNames.Length;
         SceneManager.LoadScene(sceneNames[currentSceneIndex]);
+        //GameObject playerPos = GameObject.Find("playerpos");
+        //if (playerPos != null)
+        //{
+        //    playerPos.transform.position = new Vector3(199f, 40.55f, -151f);
+        //}
+        //else
+        //{
+        //    Debug.LogWarning("No se encontró el objeto 'PlayerPos' en la escena cargada.");
+        //}
+
+    }
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        GameObject playerPos = GameObject.Find("playerpos");
+        if (playerPos != null)
+        {
+            Player.transform.position = playerPos.transform.position;
+            Debug.LogWarning(" se encontró el objeto 'PlayerPos' en la escena cargada.");
+        }
+        else
+        {
+            Debug.LogWarning("No se encontró el objeto 'PlayerPos' en la escena cargada.");
+        }
     }
 }
