@@ -58,9 +58,16 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(scene);
         currentScene = scene;
     }
-
+    public void QuitGame()
+    {
+        Debug.Log("Cerrando el juego...");
+        Application.Quit();
+    }
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        if(Player== null) Player= GameObject.Find("player1");
+        Debug.Log(Player.name);
+
         GameObject playerPos = GameObject.Find("playerpos");
         if (playerPos != null)
         {
