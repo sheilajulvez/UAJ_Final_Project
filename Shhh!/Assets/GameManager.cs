@@ -8,6 +8,8 @@ public class GameManager : MonoBehaviour
     public string[] sceneNames;
     private int currentSceneIndex = 0;
 
+    private string currentScene = "";
+
     private void Awake()
     {
         // Implementar Singleton
@@ -48,6 +50,15 @@ public class GameManager : MonoBehaviour
         //}
 
     }
+
+    public void LoadScene(string scene)
+    {
+        if (currentScene == scene) return;
+
+        SceneManager.LoadScene(scene);
+        currentScene = scene;
+    }
+
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         GameObject playerPos = GameObject.Find("playerpos");
