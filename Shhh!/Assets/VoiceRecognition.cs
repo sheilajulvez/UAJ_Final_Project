@@ -29,9 +29,18 @@ public class VoiceRecognition : MonoBehaviour
 
     private void WordRecognized(PhraseRecognizedEventArgs args)
     {
-        Debug.Log(args.text);
-        wordToAction[args.text].Invoke();
+        Debug.Log($"Comando reconocido: {args.text} (Confianza: {args.confidence})");
+
+        if (wordToAction.ContainsKey(args.text))
+        {
+            wordToAction[args.text].Invoke();
+        }
+        else
+        {
+            Debug.LogWarning("Palabra reconocida no está registrada en el diccionario.");
+        }
     }
+
 
     private void CambioDeEscena(string scene)
     {
