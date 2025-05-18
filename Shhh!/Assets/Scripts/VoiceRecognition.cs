@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Windows.Speech;
@@ -22,7 +23,10 @@ public class VoiceRecognition : MonoBehaviour
             { "mine", () => CambioDeEscena("Mina") },
             { "cinema", () => CambioDeEscena("Cine") },
             { "church", () => CambioDeEscena("Iglesia") },
-            { "voice", () => Voice() }
+            { "voice", () => Voice() },
+            { "play", () => Play() },
+            { "quit", () => QuitGame() },
+            { "back", () => BackMenu() }
         };
 
 
@@ -60,6 +64,33 @@ public class VoiceRecognition : MonoBehaviour
 
     private void Voice()
     {
-        
+        GameManager.Instance.LoadScene("Menu");
+    }
+
+    private void Play()
+    {
+        if (SceneManager.GetActiveScene().name == "Menu")
+        {
+            GameManager.Instance.LoadScene("Iglesia");
+        }
+    }
+    private void QuitGame()
+    {
+        if (SceneManager.GetActiveScene().name == "Menu")
+        {
+            GameManager.Instance.QuitGame();
+        }
+    }
+    private void BackMenu()
+    {
+        if (SceneManager.GetActiveScene().name == "Menu")
+        {
+            GameObject guia = GameObject.Find("Guia");
+            if (guia != null)
+            {
+                guia.GetComponent<UIFade>().LlamarCorrutinaFadeOut(0);
+            }
+            
+        }
     }
 }

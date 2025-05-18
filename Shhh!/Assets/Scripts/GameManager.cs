@@ -47,6 +47,12 @@ public class GameManager : MonoBehaviour
         return voiceRecogniser;
     }
 
+    public void SetVoiceRecogniser(bool newValue)
+    {
+        voiceRecogniser = newValue;
+        Debug.Log(voiceRecogniser);
+    }
+
     /*public void LoadNextScene()
     {
         if (sceneNames.Length == 0) return;
@@ -79,6 +85,13 @@ public class GameManager : MonoBehaviour
     }
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        if (scene.name == "Menu")
+        {
+            if (voiceRecogniser)
+            {
+                GameObject.Find("Microphone").SetActive(true);
+            }
+        }
         if (Player == null) Player= GameObject.Find("player1");
 
         GameObject playerPos = GameObject.Find("playerpos");
