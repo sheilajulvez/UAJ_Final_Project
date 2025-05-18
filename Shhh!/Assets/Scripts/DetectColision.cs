@@ -15,7 +15,7 @@ public class DetectColision : MonoBehaviour
         if (other.gameObject.CompareTag("Objeto"))
         {
             Debug.Log("ye2");
-            GameManager.Instance.LoadNextScene();
+            //GameManager.Instance.LoadNextScene();
         }
     }
     // Update is called once per frame

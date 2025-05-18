@@ -4,6 +4,8 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
+
+    private bool voiceRecogniser = true;
     [SerializeField] GameObject Player;
     public string[] sceneNames;
     private int currentSceneIndex = 0;
@@ -29,11 +31,23 @@ public class GameManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.R))
         {
-            LoadNextScene();
+            //LoadNextScene();
         }
     }
 
-    public void LoadNextScene()
+    public void ClassicGameMode()
+    {
+        Debug.Log("Recogniser desactivado");
+        voiceRecogniser = false;
+        LoadScene("Menu");
+    }
+
+    public bool GetVoiceRecogniser()
+    {
+        return voiceRecogniser;
+    }
+
+    /*public void LoadNextScene()
     {
         if (sceneNames.Length == 0) return;
 
@@ -49,7 +63,7 @@ public class GameManager : MonoBehaviour
         //    Debug.LogWarning("No se encontró el objeto 'PlayerPos' en la escena cargada.");
         //}
 
-    }
+    }*/
 
     public void LoadScene(string scene)
     {
@@ -65,8 +79,7 @@ public class GameManager : MonoBehaviour
     }
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if(Player== null) Player= GameObject.Find("player1");
-        Debug.Log(Player.name);
+        if (Player == null) Player= GameObject.Find("player1");
 
         GameObject playerPos = GameObject.Find("playerpos");
         if (playerPos != null)

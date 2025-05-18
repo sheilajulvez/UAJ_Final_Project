@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Windows.Speech;
 
 public class VoiceRecognition : MonoBehaviour
@@ -13,12 +14,15 @@ public class VoiceRecognition : MonoBehaviour
 
     void Start()
     {
+        DontDestroyOnLoad(gameObject); // No destruir al cambiar de escena
+
         wordToAction = new Dictionary<string, Action>
         {
-            { "retiro", () => CambioDeEscena("Retiro") },
-            { "mina", () => CambioDeEscena("Mina") },
-            { "cine", () => CambioDeEscena("Cine") },
-            { "iglesia", () => CambioDeEscena("Iglesia") }
+            { "park", () => CambioDeEscena("Retiro") },
+            { "mine", () => CambioDeEscena("Mina") },
+            { "cinema", () => CambioDeEscena("Cine") },
+            { "church", () => CambioDeEscena("Iglesia") },
+            { "voice", () => Voice() }
         };
 
 
@@ -33,7 +37,14 @@ public class VoiceRecognition : MonoBehaviour
 
         if (wordToAction.ContainsKey(args.text))
         {
-            wordToAction[args.text].Invoke();
+            if (GameManager.Instance.GetVoiceRecogniser())
+            {
+                wordToAction[args.text].Invoke();
+            }
+            else
+            {
+                Debug.Log("Reconocimentoo de voz está desactivado");
+            }
         }
         else
         {
@@ -45,5 +56,10 @@ public class VoiceRecognition : MonoBehaviour
     private void CambioDeEscena(string scene)
     {
         GameManager.Instance.LoadScene(scene);
+    }
+
+    private void Voice()
+    {
+        
     }
 }
