@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
     private GameObject Player;
     [SerializeField] GameObject image;
     public string[] sceneNames;
-    private int currentSceneIndex = 0;
+    private int coinsCollected = 0;
 
     private string currentScene = "";
 
@@ -57,6 +57,21 @@ public class GameManager : MonoBehaviour
             Cursor.visible = false;                   // Oculta el cursor
         }
         
+    }
+
+    public void SetCoinsCollected(int newValue)
+    {
+        coinsCollected = newValue;
+        Debug.Log(coinsCollected);
+        if (coinsCollected == 4)
+        {
+            LoadScene("Victory");
+        }
+    }
+
+    public int GetCoinsCollected()
+    {
+        return coinsCollected;
     }
 
     public void ClassicGameMode()
@@ -157,6 +172,11 @@ public class GameManager : MonoBehaviour
             image.SetActive(false);
             GameObject.Find("QuitButton").GetComponent<Button>().onClick.AddListener(() => QuitGame());
             GameObject.Find("PlayButton").GetComponent<Button>().onClick.AddListener(() => LoadScene("Iglesia"));
+        }
+        else if (scene.name == "Victory")
+        {
+            if (image != null) image.SetActive(false);
+            GameObject.Find("Control").SetActive(false);
         }
         else
         {

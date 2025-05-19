@@ -115,6 +115,10 @@ public class VoiceRecognition : MonoBehaviour
         {
             GameObject.Find("QuitButton").GetComponent<Button>().onClick.Invoke();
         }
+        else
+        {
+            GameManager.Instance.QuitGame();
+        }
     }
     private void BackMenu()
     {
@@ -234,33 +238,63 @@ public class VoiceRecognition : MonoBehaviour
             GameObject player = GameObject.FindGameObjectWithTag("Player");
             GameObject starCoin = GameObject.Find("StarCoin");
 
+            
+
             if (player != null && starCoin != null)
             {
+                AudioSource[] sources = player.GetComponents<AudioSource>();
+
+                
+
                 Collider triggerCollider = starCoin.GetComponent<Collider>();
 
                 if (triggerCollider != null && triggerCollider.isTrigger)
                 {
                     if (triggerCollider.bounds.Contains(player.transform.position))
                     {
-                        switch (n)
+                        foreach (AudioSource source in sources)
                         {
-                            case "Retiro":
-                                GameManager.Instance.LoadScene("Iglesia");
+                            if (source.clip != null && source.clip.name == "coin")
+                            {
+                                source.Play();
                                 break;
-                            case "Iglesia":
-                                GameManager.Instance.LoadScene("Cine");
-                                break;
-                            case "Mina":
-                                GameManager.Instance.LoadScene("Retiro");
-                                break;
-                            case "Cine":
-                                GameManager.Instance.LoadScene("Mina");
-                                break;
-                            default:
-                                Debug.LogWarning("Escena no contemplada para la transición.");
-                                break;
+                            }
                         }
-                        Debug.Log("nextscene"); // Aquí se puede cambiar por el nombre real si se quiere
+
+                        GameManager.Instance.SetCoinsCollected(GameManager.Instance.GetCoinsCollected() + 1);
+                        if (GameManager.Instance.GetCoinsCollected() < 4)
+                        {
+                            switch (n)
+                            {
+                                case "Retiro":
+                                    GameManager.Instance.LoadScene("Iglesia");
+                                    break;
+                                case "Iglesia":
+                                    GameManager.Instance.LoadScene("Cine");
+                                    break;
+                                case "Mina":
+                                    GameManager.Instance.LoadScene("Retiro");
+                                    break;
+                                case "Cine":
+                                    GameManager.Instance.LoadScene("Mina");
+                                    break;
+                                default:
+                                    Debug.LogWarning("Escena no contemplada para la transición.");
+                                    break;
+                            }
+                            Debug.Log("nextscene"); // Aquí se puede cambiar por el nombre real si se quiere
+                        }
+                    }
+                    else
+                    {
+                        foreach (AudioSource source in sources)
+                        {
+                            if (source.clip != null && source.clip.name == "empty")
+                            {
+                                source.Play();
+                                break;
+                            }
+                        }
                     }
                 }
                 else
