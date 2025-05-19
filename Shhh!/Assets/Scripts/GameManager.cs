@@ -40,22 +40,22 @@ public class GameManager : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.B))
         {
-            GameObject.Find("Back").GetComponent<Button>().onClick.Invoke(); //retroceder
+            GameObject.Find("Back").GetComponent<Button>().onClick.Invoke(); //retroceder boton menús
         }
 
-            // Al pulsar Shift Izquierdo
-            if (Input.GetKeyDown(KeyCode.LeftShift))
+        // Al pulsar Shift Izquierdo
+        if (Input.GetKeyDown(KeyCode.LeftShift))
         {
             Cursor.lockState = CursorLockMode.None; // Libera el cursor
             Cursor.visible = true;                  // Muestra el cursor
         }
 
-            // Al soltar Shift Izquierdo
-            if (Input.GetKeyUp(KeyCode.LeftShift))
-            {
-                Cursor.lockState = CursorLockMode.Locked; // Bloquea el cursor
-                Cursor.visible = false;                   // Oculta el cursor
-            }
+        // Al soltar Shift Izquierdo
+        if (Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            Cursor.lockState = CursorLockMode.Locked; // Bloquea el cursor
+            Cursor.visible = false;                   // Oculta el cursor
+        }
         
     }
 

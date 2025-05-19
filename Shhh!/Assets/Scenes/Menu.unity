@@ -1324,12 +1324,13 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_text: "\tKEY WORD                 \t\t\t \t\tACTION\n                                                              
-    \n\t\"BUTTON NAME\"             \t\t PRESS BUTTON\n\t\"MOVE\"               
-    \t\t\t\t WALK FORWARD\n \t\"STOP\"         \t  \t\t\t\tSTOP WALKING\n \t\"RIGHT\"/
-    \"LEFT\"         \t\tTURN RIGHT or LEFT\n\t \"go {PLACE}\"          \t\t\t\tvisit
-    church, mine, park...  \n\t\"PICK\" \t\t \t\t\t\tpick the star coin          
-    \n \t\"HELP\"       \t          \t\t\t\topen help guide\n\t\"QUIT\"         \t       
-    \t\t\t\tCLOSE GAME\n\t\"BACK\" \t\t\t\t\t\texit "
+    \n      \"play, help, exit \"                         PRESS that BUTTON: \n 
+    \"MOVE/ move forward\"        \t    WALK FORWARD\n \t     \"STOP\"         \t 
+    \t\t\t\t      STOP WALKING\n       \"RIGHT\"/ \"LEFT\"         \t\t         
+    TURN RIGHT or LEFT\n    \"Look \"up\"/ \"Down\"         \t\t   Look up or down\n\t\"go
+    {PLACE}\"          \t\t\t   visit church, mine, park...  \n\t     \"PICK\" \t\t
+    \t\t pick the star coin           \n\t     \"QUIT\"         \t        \t\t\t\t        
+    CLOSE GAME"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8b43bb20b01713842866a4797976400e, type: 2}
   m_sharedMaterial: {fileID: -4626171393576299776, guid: 8b43bb20b01713842866a4797976400e, type: 2}

@@ -31,15 +31,20 @@ public class VoiceRecognition : MonoBehaviour
             { "quit", () => QuitGame() },
             { "microphone", () => GoSettings() },
             { "exit", () => BackMenu() },
+            { "back", () => BackMenu() },
             { "classic", () => Classic() },
             { "help", () => Controls() },
             { "move", () => MoveForward() },
+            { "move forward", () => MoveForward() },
             { "stop", () => Stop() },
             { "right", () => RotateRight() },
             { "left", () => RotateLeft() },
+            { "look up", () => RotateUp() },
+            { "look down", () => RotateDown() },
             { "up", () => RotateUp() },
             { "down", () => RotateDown() },
             { "pick", () => CheckArea() },
+            { "coin", () => CheckArea() },
 
         };
 
