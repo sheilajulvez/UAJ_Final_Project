@@ -6678,11 +6678,20 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 1.89
       objectReference: {fileID: 0}
+    - target: {fileID: 8791428593411257164, guid: c39ab82746ede5a4ca4e2fe5c11d24e7, type: 3}
+      propertyPath: cameraTransform
+      value: 
+      objectReference: {fileID: 1328320923}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c39ab82746ede5a4ca4e2fe5c11d24e7, type: 3}
+--- !u!4 &1328320923 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6486864433189183499, guid: c39ab82746ede5a4ca4e2fe5c11d24e7, type: 3}
+  m_PrefabInstance: {fileID: 1328320922}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1332206222
 PrefabInstance:
   m_ObjectHideFlags: 0

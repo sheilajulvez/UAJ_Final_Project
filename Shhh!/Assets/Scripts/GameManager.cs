@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+
 
 public class GameManager : MonoBehaviour
 {
@@ -8,6 +10,7 @@ public class GameManager : MonoBehaviour
 
     private bool voiceRecogniser = true;
     private GameObject Player;
+    [SerializeField] RawImage image;
     public string[] sceneNames;
     private int currentSceneIndex = 0;
 
@@ -27,20 +30,25 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject); // Evitar duplicados
         }
     }
+   
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.H))
         {
-            //LoadNextScene();
+            GameObject.Find("Control").GetComponent<Button>().onClick.Invoke();//menu de ayuda con los comandos de voz
         }
-       
+        else if (Input.GetKeyDown(KeyCode.B))
+        {
+            GameObject.Find("Back").GetComponent<Button>().onClick.Invoke(); //retroceder
+        }
+
             // Al pulsar Shift Izquierdo
             if (Input.GetKeyDown(KeyCode.LeftShift))
-            {
-                Cursor.lockState = CursorLockMode.None; // Libera el cursor
-                Cursor.visible = true;                  // Muestra el cursor
-            }
+        {
+            Cursor.lockState = CursorLockMode.None; // Libera el cursor
+            Cursor.visible = true;                  // Muestra el cursor
+        }
 
             // Al soltar Shift Izquierdo
             if (Input.GetKeyUp(KeyCode.LeftShift))
@@ -51,12 +59,12 @@ public class GameManager : MonoBehaviour
         
     }
 
-    public void ClassicGameMode()
-    {
-        Debug.Log("Recogniser desactivado");
-        voiceRecogniser = false;
-        LoadScene("Menu");
-    }
+    //public void ClassicGameMode()
+    //{
+    //    Debug.Log("Recogniser desactivado");
+    //    voiceRecogniser = false;
+    //    LoadScene("Menu");
+    //}
 
     public bool GetVoiceRecogniser()
     {
@@ -100,45 +108,23 @@ public class GameManager : MonoBehaviour
 
     public void RotaDerechaPersonaje()
     {
-        Player.GetComponent<PlayerVoiceMove>().AddRotation(30);
+        Player.GetComponent<PlayerVoiceMove>().AddRotationY(30);
     }
 
     public void RotaIzquierdaPersonaje()
     {
-        Player.GetComponent<PlayerVoiceMove>().AddRotation(-30);
+        Player.GetComponent<PlayerVoiceMove>().AddRotationY(-30);
     }
-    //public void RetrocedePersonaje()
-    //{
-    //    switch (currentScene)
-    //    {
-    //        case "Iglesia":
-    //            IglesiaPath.Instance.RetrocedeRuta();
-    //            IglesiaTexts.Instance.StartTypingR();
-    //            break;
-    //        case "Mina":
-    //            MinePath.Instance.RetrocedeRuta();
-    //            MineTexts.Instance.StartTypingR();
-    //            break;
-
-    //    }
-    //}
-    /*public void LoadNextScene()
+    public void RotaArribaPersonaje()
     {
-        if (sceneNames.Length == 0) return;
+        Player.GetComponent<PlayerVoiceMove>().AddRotationX(30);
+    }
 
-        currentSceneIndex = (currentSceneIndex + 1) % sceneNames.Length;
-        SceneManager.LoadScene(sceneNames[currentSceneIndex]);
-        //GameObject playerPos = GameObject.Find("playerpos");
-        //if (playerPos != null)
-        //{
-        //    playerPos.transform.position = new Vector3(199f, 40.55f, -151f);
-        //}
-        //else
-        //{
-        //    Debug.LogWarning("No se encontró el objeto 'PlayerPos' en la escena cargada.");
-        //}
+    public void RotaAbajoPersonaje()
+    {
+        Player.GetComponent<PlayerVoiceMove>().AddRotationX(-30);
+    }
 
-    }*/
 
     public void LoadScene(string scene)
     {
@@ -146,6 +132,16 @@ public class GameManager : MonoBehaviour
 
         SceneManager.LoadScene(scene);
         currentScene = scene;
+        if (scene != "Menu")
+        {
+            image.gameObject.SetActive(true);
+
+        }
+        else
+        {
+            image.gameObject.SetActive(false);
+
+        }
     }
     public void QuitGame()
     {

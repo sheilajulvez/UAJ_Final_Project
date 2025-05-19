@@ -30,13 +30,15 @@ public class VoiceRecognition : MonoBehaviour
             { "play", () => Play() },
             { "quit", () => QuitGame() },
             { "microphone", () => GoSettings() },
-            { "exit", () => BackMenu() },
+            { "back", () => BackMenu() },
             //{ "classic", () => Classic() },
             { "help", () => Controls() },
             { "move", () => MoveForward() },
             { "stop", () => Stop() },
             { "right", () => RotateRight() },
             { "left", () => RotateLeft() },
+             { "up", () => RotateUp() },
+            { "down", () => RotateDown() },
             { "pick", () => CheckArea() },
 
         };
@@ -173,11 +175,24 @@ public class VoiceRecognition : MonoBehaviour
         
     }
 
-    private void RotateLeft()
+    private void RotateUp()
     {
        
-            GameManager.Instance.RotaIzquierdaPersonaje();
+            GameManager.Instance.RotaArribaPersonaje();
         
+    }
+    private void RotateDown()
+    {
+
+        GameManager.Instance.RotaAbajoPersonaje();
+
+    }
+
+    private void RotateLeft()
+    {
+
+        GameManager.Instance.RotaIzquierdaPersonaje();
+
     }
 
     private void Stop()
