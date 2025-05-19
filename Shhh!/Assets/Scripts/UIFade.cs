@@ -10,10 +10,11 @@ public class UIFade : MonoBehaviour
     public Button myButtonClassic;
     public Button myButtonVoice;
 
+
     void Start()
     {
         canvasGroup = GetComponent<CanvasGroup>();
-        // Puedes activarlo automáticamente o llamarlo desde otro script
+        
         if (gameObject.name == "Fade") StartCoroutine(FadeIn(10f));
 
         if (myButtonClassic != null) myButtonClassic.onClick.AddListener(() => GameManager.Instance.SetVoiceRecogniser(false));
@@ -33,7 +34,7 @@ public class UIFade : MonoBehaviour
             yield return null;
         }
 
-        canvasGroup.alpha = 1f; // Asegura que termine totalmente visible
+        canvasGroup.alpha = 1f;
 
         onComplete?.Invoke();
     }
@@ -60,10 +61,7 @@ public class UIFade : MonoBehaviour
 
     public void LlamarCorrutinaFadeOut(float timeWaiting)
     {
-        StartCoroutine(FadeOut(timeWaiting, () => {
-            Debug.Log("Fade out completo. Ahora ocultamos el panel.");
-            gameObject.SetActive(false);
-        }));
+        StartCoroutine(FadeOut(timeWaiting, () => { gameObject.SetActive(false); }));
     }
 
     public void LlamarCorrutinaFadeIn(float timeWaiting)

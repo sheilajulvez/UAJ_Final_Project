@@ -5,6 +5,7 @@ using System.Linq;
 using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using UnityEngine.Windows.Speech;
 
 public class VoiceRecognition : MonoBehaviour
@@ -13,20 +14,25 @@ public class VoiceRecognition : MonoBehaviour
 
     Dictionary<string, Action> wordToAction;
 
+    [SerializeField] GameObject guia;
+
     void Start()
     {
         DontDestroyOnLoad(gameObject); // No destruir al cambiar de escena
 
         wordToAction = new Dictionary<string, Action>
         {
-            { "park", () => CambioDeEscena("Retiro") },
-            { "mine", () => CambioDeEscena("Mina") },
-            { "cinema", () => CambioDeEscena("Cine") },
-            { "church", () => CambioDeEscena("Iglesia") },
+            { "go park", () => CambioDeEscena("Retiro") },
+            { "go mine", () => CambioDeEscena("Mina") },
+            { "go cinema", () => CambioDeEscena("Cine") },
+            { "go church", () => CambioDeEscena("Iglesia") },
             { "voice", () => Voice() },
             { "play", () => Play() },
             { "quit", () => QuitGame() },
-            { "back", () => BackMenu() }
+            { "microphone", () => GoSettings() },
+            { "exit", () => BackMenu() },
+            { "classic", () => Classic() },
+            { "help", () => Controls() }
         };
 
 
@@ -59,38 +65,95 @@ public class VoiceRecognition : MonoBehaviour
 
     private void CambioDeEscena(string scene)
     {
-        GameManager.Instance.LoadScene(scene);
+        string n = SceneManager.GetActiveScene().name;
+        if (n == "Iglesia" || n == "Mina" || n == "Cine" || n == "Retiro")
+        {
+            GameManager.Instance.LoadScene(scene);
+        }
     }
 
     private void Voice()
     {
-        GameManager.Instance.LoadScene("Menu");
+        if (SceneManager.GetActiveScene().name == "Selection")
+        {
+            GameManager.Instance.LoadScene("Menu");
+        }
+        else if (SceneManager.GetActiveScene().name == "Menu")
+        {
+            GameObject voice = GameObject.Find("Voice");
+            if (voice != null)
+            {
+                voice.GetComponent<Button>().onClick.Invoke();
+            }
+
+        }
     }
 
     private void Play()
     {
         if (SceneManager.GetActiveScene().name == "Menu")
         {
-            GameManager.Instance.LoadScene("Iglesia");
+            GameObject.Find("PlayButton").GetComponent<Button>().onClick.Invoke();
         }
     }
     private void QuitGame()
     {
         if (SceneManager.GetActiveScene().name == "Menu")
         {
-            GameManager.Instance.QuitGame();
+            GameObject.Find("QuitButton").GetComponent<Button>().onClick.Invoke();
         }
     }
     private void BackMenu()
     {
         if (SceneManager.GetActiveScene().name == "Menu")
         {
-            GameObject guia = GameObject.Find("Guia");
-            if (guia != null)
+            GameObject back = GameObject.Find("Back");
+            if (back != null)
             {
-                guia.GetComponent<UIFade>().LlamarCorrutinaFadeOut(0);
+                back.GetComponent<Button>().onClick.Invoke();
             }
-            
+            else {
+                GameObject hide = GameObject.Find("Hide");
+                if (hide != null)
+                {
+                    hide.GetComponent<Button>().onClick.Invoke();
+                }
+            }
+        }
+    }
+
+    private void GoSettings()
+    {
+        if (SceneManager.GetActiveScene().name == "Menu")
+        {
+            GameObject micro = GameObject.Find("Microphone");
+            if (micro != null)
+            {
+                micro.GetComponent<Button>().onClick.Invoke();
+            }
+        }
+    }
+    private void Classic()
+    {
+        if (SceneManager.GetActiveScene().name == "Menu")
+        {
+            GameObject classic = GameObject.Find("Classic");
+            if (classic != null)
+            {
+                classic.GetComponent<Button>().onClick.Invoke();
+            }
+        }
+    }
+
+    private void Controls()
+    {
+        if (SceneManager.GetActiveScene().name == "Menu")
+        {
+            GameObject control = GameObject.Find("Control");
+            if (control != null)
+            {
+                control.GetComponent<Button>().onClick.Invoke();
+            }
         }
     }
 }
