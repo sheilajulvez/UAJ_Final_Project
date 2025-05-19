@@ -16,6 +16,12 @@ public class MoveAgent : MonoBehaviour
 
     void Update()
     {
+        if (!agente.pathPending && !agente.hasPath)
+        {
+            agente.updatePosition = false;
+        }
+
+
         if (!rutaActiva || puntosRuta == null || puntosRuta.Length == 0)
             return;
 
@@ -35,6 +41,8 @@ public class MoveAgent : MonoBehaviour
 
     public void IniciarMovimimiento(Vector3 nuevaRuta)
     {
+        agente.Warp(transform.position);
+        agente.updatePosition = true;
         agente.SetDestination(nuevaRuta);
     }
 

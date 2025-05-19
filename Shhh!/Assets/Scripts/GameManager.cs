@@ -52,6 +52,7 @@ public class GameManager : MonoBehaviour
     {
         Player = p;
         Player.GetComponent<NavMeshAgent>().updateRotation = false;
+        Player.GetComponent<NavMeshAgent>().updatePosition = false;
     }
 
     public MoveAgent GetPlayer() { return Player.GetComponent<MoveAgent>(); }
@@ -76,7 +77,7 @@ public class GameManager : MonoBehaviour
         //        break;
 
         //}
-        Vector3 destino = Player.transform.position + Player.transform.forward * 2f;
+        Vector3 destino = Player.transform.position + Player.transform.forward * 3f;
 
         Debug.Log(destino.ToString());
         Player.GetComponent<MoveAgent>().IniciarMovimimiento(destino);
