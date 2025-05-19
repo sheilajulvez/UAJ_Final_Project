@@ -115,7 +115,7 @@ public class GameManager : MonoBehaviour
         //        break;
 
         //}
-        Vector3 destino = Player.transform.position + Player.transform.forward * 3f;
+        Vector3 destino = Player.transform.position + Player.transform.forward * 5f;
 
         Debug.Log(destino.ToString());
         Player.GetComponent<MoveAgent>().IniciarMovimimiento(destino);

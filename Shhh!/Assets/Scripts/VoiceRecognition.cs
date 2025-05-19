@@ -36,7 +36,6 @@ public class VoiceRecognition : MonoBehaviour
             { "help", () => Controls() },
             { "move", () => MoveForward() },
             { "move forward", () => MoveForward() },
-            { "stop", () => Stop() },
             { "right", () => RotateRight() },
             { "left", () => RotateLeft() },
             { "look up", () => RotateUp() },
@@ -44,8 +43,7 @@ public class VoiceRecognition : MonoBehaviour
             { "up", () => RotateUp() },
             { "down", () => RotateDown() },
             { "pick", () => CheckArea() },
-            { "coin", () => CheckArea() },
-
+            { "coin", () => CheckArea() }
         };
 
 
@@ -219,15 +217,6 @@ public class VoiceRecognition : MonoBehaviour
         if (n == "Retiro" || n == "Cine" || n == "Iglesia" || n == "Mina")
         {
             GameManager.Instance.RotaIzquierdaPersonaje();
-        }
-    }
-
-    private void Stop()
-    {
-        string n = SceneManager.GetActiveScene().name;
-        if (n == "Retiro" || n == "Cine" || n == "Iglesia" || n == "Mina")
-        {
-            //GameManager.Instance.RetrocedePersonaje();
         }
     }
     private void CheckArea()
