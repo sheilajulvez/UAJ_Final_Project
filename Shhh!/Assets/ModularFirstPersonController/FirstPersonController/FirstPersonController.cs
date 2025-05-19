@@ -209,15 +209,15 @@ public class FirstPersonController : MonoBehaviour
         {
             yaw = transform.localEulerAngles.y + Input.GetAxis("Mouse X") * mouseSensitivity;
 
+            // PITCH acumulado desde el valor actual
+            float mouseY = Input.GetAxis("Mouse Y");
             if (!invertCamera)
-            {
-                pitch -= mouseSensitivity * Input.GetAxis("Mouse Y");
-            }
+                pitch = playerCamera.transform.localEulerAngles.x - mouseY * mouseSensitivity;
             else
-            {
-                // Inverted Y
-                pitch += mouseSensitivity * Input.GetAxis("Mouse Y");
-            }
+                pitch = playerCamera.transform.localEulerAngles.x + mouseY * mouseSensitivity;
+
+            // Arreglar posibles valores extraños debido al wrap de Euler Angles
+            if (pitch > 180) pitch -= 360;
 
             // Clamp pitch between lookAngle
             pitch = Mathf.Clamp(pitch, -maxLookAngle, maxLookAngle);
