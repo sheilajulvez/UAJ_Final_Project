@@ -32,7 +32,12 @@ public class VoiceRecognition : MonoBehaviour
             { "microphone", () => GoSettings() },
             { "exit", () => BackMenu() },
             { "classic", () => Classic() },
-            { "help", () => Controls() }
+            { "help", () => Controls() },
+            { "move forward", () => MoveForward() },
+            { "left", () => RotateLeft() },
+            { "right", () => RotateRight() },
+            { "stop", () => Stop() },
+            { "check area", () => CheckArea() }
         };
 
 
@@ -154,6 +159,50 @@ public class VoiceRecognition : MonoBehaviour
             {
                 control.GetComponent<Button>().onClick.Invoke();
             }
+        }
+    }
+
+    private void MoveForward()
+    {
+        string n = SceneManager.GetActiveScene().name;
+        if (n == "Iglesia" || n == "Mina" || n == "Cine" || n == "Retiro")
+        {
+            // TO DO
+        }
+    }
+
+    private void RotateRight()
+    {
+        string n = SceneManager.GetActiveScene().name;
+        if (n == "Iglesia" || n == "Mina" || n == "Cine" || n == "Retiro")
+        {
+            // TO DO
+        }
+    }
+
+    private void RotateLeft()
+    {
+        string n = SceneManager.GetActiveScene().name;
+        if (n == "Iglesia" || n == "Mina" || n == "Cine" || n == "Retiro")
+        {
+            // TO DO
+        }
+    }
+
+    private void Stop()
+    {
+        string n = SceneManager.GetActiveScene().name;
+        if (n == "Iglesia" || n == "Mina" || n == "Cine" || n == "Retiro")
+        {
+            // TO DO
+        }
+    }
+    private void CheckArea()
+    {
+        string n = SceneManager.GetActiveScene().name;
+        if (n == "Iglesia" || n == "Mina" || n == "Cine" || n == "Retiro")
+        {
+            // TO DO
         }
     }
 }

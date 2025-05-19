@@ -9,6 +9,7 @@ public class UIFade : MonoBehaviour
 
     public Button myButtonClassic;
     public Button myButtonVoice;
+    public Button myButtonQuit;
 
 
     void Start()
@@ -19,6 +20,7 @@ public class UIFade : MonoBehaviour
 
         if (myButtonClassic != null) myButtonClassic.onClick.AddListener(() => GameManager.Instance.SetVoiceRecogniser(false));
         if (myButtonVoice != null) myButtonVoice.onClick.AddListener(() => GameManager.Instance.SetVoiceRecogniser(true));
+        if (myButtonQuit != null) myButtonQuit.onClick.AddListener(() => GameManager.Instance.QuitGame());
     }
 
     public IEnumerator FadeIn(float timeWaiting, System.Action onComplete = null)
