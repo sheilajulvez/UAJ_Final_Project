@@ -34,6 +34,21 @@ public class GameManager : MonoBehaviour
         {
             //LoadNextScene();
         }
+       
+            // Al pulsar Shift Izquierdo
+            if (Input.GetKeyDown(KeyCode.LeftShift))
+            {
+                Cursor.lockState = CursorLockMode.None; // Libera el cursor
+                Cursor.visible = true;                  // Muestra el cursor
+            }
+
+            // Al soltar Shift Izquierdo
+            if (Input.GetKeyUp(KeyCode.LeftShift))
+            {
+                Cursor.lockState = CursorLockMode.Locked; // Bloquea el cursor
+                Cursor.visible = false;                   // Oculta el cursor
+            }
+        
     }
 
     public void ClassicGameMode()

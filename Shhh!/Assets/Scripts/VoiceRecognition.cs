@@ -26,18 +26,18 @@ public class VoiceRecognition : MonoBehaviour
             { "go mine", () => CambioDeEscena("Mina") },
             { "go cinema", () => CambioDeEscena("Cine") },
             { "go church", () => CambioDeEscena("Iglesia") },
-            { "voice", () => Voice() },
+           // { "voice", () => Voice() },
             { "play", () => Play() },
             { "quit", () => QuitGame() },
             { "microphone", () => GoSettings() },
             { "exit", () => BackMenu() },
-            { "classic", () => Classic() },
+            //{ "classic", () => Classic() },
             { "help", () => Controls() },
-            { "move forward", () => MoveForward() },
+            { "move", () => MoveForward() },
             { "stop", () => Stop() },
             { "right", () => RotateRight() },
             { "left", () => RotateLeft() },
-            { "check area", () => CheckArea() },
+            { "pick", () => CheckArea() },
 
         };
 
@@ -111,8 +111,7 @@ public class VoiceRecognition : MonoBehaviour
     }
     private void BackMenu()
     {
-        if (SceneManager.GetActiveScene().name == "Menu")
-        {
+      
             GameObject back = GameObject.Find("Back");
             if (back != null)
             {
@@ -125,7 +124,7 @@ public class VoiceRecognition : MonoBehaviour
                     hide.GetComponent<Button>().onClick.Invoke();
                 }
             }
-        }
+        
     }
 
     private void GoSettings()
@@ -153,14 +152,13 @@ public class VoiceRecognition : MonoBehaviour
 
     private void Controls()
     {
-        if (SceneManager.GetActiveScene().name == "Menu")
-        {
+        Debug.Log("HELP");
             GameObject control = GameObject.Find("Control");
             if (control != null)
             {
                 control.GetComponent<Button>().onClick.Invoke();
             }
-        }
+        
     }
 
     private void MoveForward()
