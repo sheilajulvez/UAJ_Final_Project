@@ -64,35 +64,48 @@ public class GameManager : MonoBehaviour
 
     public void AvanzaPersonaje()
     {
-        switch (currentScene)
-        {
-            case "Iglesia":
-                IglesiaPath.Instance.AvanzaRuta();
-                IglesiaTexts.Instance.StartTyping();
-                break;
-            case "Mina":
-                MinePath.Instance.AvanzaRuta();
-                MineTexts.Instance.StartTyping();
-                break;
+        //switch (currentScene)
+        //{
+        //    case "Iglesia":
+        //        IglesiaPath.Instance.AvanzaRuta();
+        //        IglesiaTexts.Instance.StartTyping();
+        //        break;
+        //    case "Mina":
+        //        MinePath.Instance.AvanzaRuta();
+        //        MineTexts.Instance.StartTyping();
+        //        break;
 
-        }
+        //}
+        Vector3 destino = Player.transform.position + Player.transform.forward * 2f;
+
+        Debug.Log(destino.ToString());
+        Player.GetComponent<MoveAgent>().IniciarMovimimiento(destino);
     }
 
-    public void RetrocedePersonaje()
+    public void RotaDerechaPersonaje()
     {
-        switch (currentScene)
-        {
-            case "Iglesia":
-                IglesiaPath.Instance.RetrocedeRuta();
-                IglesiaTexts.Instance.StartTypingR();
-                break;
-            case "Mina":
-                MinePath.Instance.RetrocedeRuta();
-                MineTexts.Instance.StartTypingR();
-                break;
-
-        }
+        Player.GetComponent<PlayerVoiceMove>().AddRotation(30);
     }
+
+    public void RotaIzquierdaPersonaje()
+    {
+        Player.GetComponent<PlayerVoiceMove>().AddRotation(-30);
+    }
+    //public void RetrocedePersonaje()
+    //{
+    //    switch (currentScene)
+    //    {
+    //        case "Iglesia":
+    //            IglesiaPath.Instance.RetrocedeRuta();
+    //            IglesiaTexts.Instance.StartTypingR();
+    //            break;
+    //        case "Mina":
+    //            MinePath.Instance.RetrocedeRuta();
+    //            MineTexts.Instance.StartTypingR();
+    //            break;
+
+    //    }
+    //}
     /*public void LoadNextScene()
     {
         if (sceneNames.Length == 0) return;

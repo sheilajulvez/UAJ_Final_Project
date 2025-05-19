@@ -33,6 +33,11 @@ public class MoveAgent : MonoBehaviour
         agente.SetDestination(puntosRuta[indiceActual].position);
     }
 
+    public void IniciarMovimimiento(Vector3 nuevaRuta)
+    {
+        agente.SetDestination(nuevaRuta);
+    }
+
     private void AvanzarAlSiguientePunto()
     {
         indiceActual++;
