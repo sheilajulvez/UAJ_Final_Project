@@ -162,7 +162,8 @@ public class GameManager : MonoBehaviour
             if (voiceRecogniser)
             {
                 GameObject.Find("Microphone").SetActive(true);
-                
+                GameObject.Find("ControlC").SetActive(false);
+
             }
             else
             {
@@ -180,6 +181,8 @@ public class GameManager : MonoBehaviour
         }
         else
         {
+            GameObject.Find("ControlC").SetActive(false);
+
             if (image != null) image.SetActive(true);
         }
         //if (Player == null) Player= GameObject.Find("player1");
