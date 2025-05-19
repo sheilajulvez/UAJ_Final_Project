@@ -147,6 +147,11 @@ public class GameManager : MonoBehaviour
             if (voiceRecogniser)
             {
                 GameObject.Find("Microphone").SetActive(true);
+                
+            }
+            else
+            {
+                GameObject.Find("Control").SetActive(false);
             }
             image = GameObject.Find("spaceImage");
             image.SetActive(false);
