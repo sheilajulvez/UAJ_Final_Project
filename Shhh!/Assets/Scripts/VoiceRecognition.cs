@@ -14,7 +14,7 @@ public class VoiceRecognition : MonoBehaviour
 
     Dictionary<string, Action> wordToAction;
 
-    [SerializeField] GameObject guia;
+    GameObject controlSave;
 
     void Start()
     {
@@ -26,18 +26,18 @@ public class VoiceRecognition : MonoBehaviour
             { "go mine", () => CambioDeEscena("Mina") },
             { "go cinema", () => CambioDeEscena("Cine") },
             { "go church", () => CambioDeEscena("Iglesia") },
-           // { "voice", () => Voice() },
+            { "voice", () => Voice() },
             { "play", () => Play() },
             { "quit", () => QuitGame() },
             { "microphone", () => GoSettings() },
-            { "back", () => BackMenu() },
-            //{ "classic", () => Classic() },
+            { "exit", () => BackMenu() },
+            { "classic", () => Classic() },
             { "help", () => Controls() },
             { "move", () => MoveForward() },
             { "stop", () => Stop() },
             { "right", () => RotateRight() },
             { "left", () => RotateLeft() },
-             { "up", () => RotateUp() },
+            { "up", () => RotateUp() },
             { "down", () => RotateDown() },
             { "pick", () => CheckArea() },
 
@@ -73,9 +73,11 @@ public class VoiceRecognition : MonoBehaviour
 
     private void CambioDeEscena(string scene)
     {
-       
+        string n = SceneManager.GetActiveScene().name;
+        if (n == "Retiro" || n == "Cine" || n == "Iglesia" || n == "Mina")
+        {
             GameManager.Instance.LoadScene(scene);
-        
+        }
     }
 
     private void Voice()
@@ -111,20 +113,23 @@ public class VoiceRecognition : MonoBehaviour
     }
     private void BackMenu()
     {
-      
+        if (SceneManager.GetActiveScene().name != "Selection" && SceneManager.GetActiveScene().name != "Victory")
+        {
             GameObject back = GameObject.Find("Back");
             if (back != null)
             {
                 back.GetComponent<Button>().onClick.Invoke();
+                controlSave.SetActive(true);
             }
-            else {
+            else
+            {
                 GameObject hide = GameObject.Find("Hide");
                 if (hide != null)
                 {
                     hide.GetComponent<Button>().onClick.Invoke();
                 }
             }
-        
+        }
     }
 
     private void GoSettings()
@@ -152,98 +157,116 @@ public class VoiceRecognition : MonoBehaviour
 
     private void Controls()
     {
-        Debug.Log("HELP");
+        if (SceneManager.GetActiveScene().name != "Selection" && SceneManager.GetActiveScene().name != "Victory")
+        {
             GameObject control = GameObject.Find("Control");
             if (control != null)
             {
                 control.GetComponent<Button>().onClick.Invoke();
+                control.SetActive(false);
+                controlSave = control;
             }
-        
+        }
     }
 
     private void MoveForward()
     {
-       
+        string n = SceneManager.GetActiveScene().name;
+        if (n == "Retiro" || n == "Cine" || n == "Iglesia" || n == "Mina")
+        {
             GameManager.Instance.AvanzaPersonaje();
-        
+        }
     }
 
     private void RotateRight()
     {
-      
+        string n = SceneManager.GetActiveScene().name;
+        if (n == "Retiro" || n == "Cine" || n == "Iglesia" || n == "Mina")
+        {
             GameManager.Instance.RotaDerechaPersonaje();
-        
+        }
     }
 
     private void RotateUp()
     {
-       
+        string n = SceneManager.GetActiveScene().name;
+        if (n == "Retiro" || n == "Cine" || n == "Iglesia" || n == "Mina")
+        {
             GameManager.Instance.RotaArribaPersonaje();
-        
+        }
     }
     private void RotateDown()
     {
-
-        GameManager.Instance.RotaAbajoPersonaje();
-
+        string n = SceneManager.GetActiveScene().name;
+        if (n == "Retiro" || n == "Cine" || n == "Iglesia" || n == "Mina")
+        {
+            GameManager.Instance.RotaAbajoPersonaje();
+        }
     }
 
     private void RotateLeft()
     {
-
-        GameManager.Instance.RotaIzquierdaPersonaje();
-
+        string n = SceneManager.GetActiveScene().name;
+        if (n == "Retiro" || n == "Cine" || n == "Iglesia" || n == "Mina")
+        {
+            GameManager.Instance.RotaIzquierdaPersonaje();
+        }
     }
 
     private void Stop()
     {
-       
+        string n = SceneManager.GetActiveScene().name;
+        if (n == "Retiro" || n == "Cine" || n == "Iglesia" || n == "Mina")
+        {
             //GameManager.Instance.RetrocedePersonaje();
-        
+        }
     }
     private void CheckArea()
     {
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
-        GameObject starCoin = GameObject.Find("StarCoin");
-
-        if (player != null && starCoin != null)
+        string n = SceneManager.GetActiveScene().name;
+        if (n == "Retiro" || n == "Cine" || n == "Iglesia" || n == "Mina")
         {
-            Collider triggerCollider = starCoin.GetComponent<Collider>();
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+            GameObject starCoin = GameObject.Find("StarCoin");
 
-            if (triggerCollider != null && triggerCollider.isTrigger)
+            if (player != null && starCoin != null)
             {
-                if (triggerCollider.bounds.Contains(player.transform.position))
+                Collider triggerCollider = starCoin.GetComponent<Collider>();
+
+                if (triggerCollider != null && triggerCollider.isTrigger)
                 {
-                    switch (SceneManager.GetActiveScene().name)
+                    if (triggerCollider.bounds.Contains(player.transform.position))
                     {
-                        case "Retiro":
-                            GameManager.Instance.LoadScene("Iglesia");
-                            break;
-                        case "Iglesia":
-                            GameManager.Instance.LoadScene("Cine");
-                            break;
-                        case "Mina":
-                            GameManager.Instance.LoadScene("Retiro");
-                            break;
-                        case "Cine":
-                            GameManager.Instance.LoadScene("Mina");
-                            break;
-                        default:
-                            Debug.LogWarning("Escena no contemplada para la transición.");
-                            break;
+                        switch (n)
+                        {
+                            case "Retiro":
+                                GameManager.Instance.LoadScene("Iglesia");
+                                break;
+                            case "Iglesia":
+                                GameManager.Instance.LoadScene("Cine");
+                                break;
+                            case "Mina":
+                                GameManager.Instance.LoadScene("Retiro");
+                                break;
+                            case "Cine":
+                                GameManager.Instance.LoadScene("Mina");
+                                break;
+                            default:
+                                Debug.LogWarning("Escena no contemplada para la transición.");
+                                break;
+                        }
+                        Debug.Log("nextscene"); // Aquí se puede cambiar por el nombre real si se quiere
                     }
-                    Debug.Log("nextscene"); // Aquí se puede cambiar por el nombre real si se quiere
+                }
+                else
+                {
+                    Debug.LogWarning("El collider de StarCoin no está marcado como Trigger.");
                 }
             }
             else
             {
-                Debug.LogWarning("El collider de StarCoin no está marcado como Trigger.");
+                Debug.LogError("No se encontró el jugador o el objeto StarCoin.");
             }
         }
-        else
-        {
-            Debug.LogError("No se encontró el jugador o el objeto StarCoin.");
-        }
-
     }
 }

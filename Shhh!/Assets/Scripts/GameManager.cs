@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
 
     private bool voiceRecogniser = true;
     private GameObject Player;
-    [SerializeField] RawImage image;
+    [SerializeField] GameObject image;
     public string[] sceneNames;
     private int currentSceneIndex = 0;
 
@@ -59,12 +59,12 @@ public class GameManager : MonoBehaviour
         
     }
 
-    //public void ClassicGameMode()
-    //{
-    //    Debug.Log("Recogniser desactivado");
-    //    voiceRecogniser = false;
-    //    LoadScene("Menu");
-    //}
+    public void ClassicGameMode()
+    {
+        Debug.Log("Recogniser desactivado");
+        voiceRecogniser = false;
+        LoadScene("Menu");
+    }
 
     public bool GetVoiceRecogniser()
     {
@@ -132,16 +132,7 @@ public class GameManager : MonoBehaviour
 
         SceneManager.LoadScene(scene);
         currentScene = scene;
-        if (scene != "Menu")
-        {
-            image.gameObject.SetActive(true);
-
-        }
-        else
-        {
-            image.gameObject.SetActive(false);
-
-        }
+        
     }
     public void QuitGame()
     {
@@ -157,6 +148,14 @@ public class GameManager : MonoBehaviour
             {
                 GameObject.Find("Microphone").SetActive(true);
             }
+            image = GameObject.Find("spaceImage");
+            image.SetActive(false);
+            GameObject.Find("QuitButton").GetComponent<Button>().onClick.AddListener(() => QuitGame());
+            GameObject.Find("PlayButton").GetComponent<Button>().onClick.AddListener(() => LoadScene("Iglesia"));
+        }
+        else
+        {
+            if (image != null) image.SetActive(true);
         }
         //if (Player == null) Player= GameObject.Find("player1");
 
