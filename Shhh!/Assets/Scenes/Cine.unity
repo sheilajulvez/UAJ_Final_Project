@@ -2976,7 +2976,7 @@ Transform:
   m_GameObject: {fileID: 167849339}
   serializedVersion: 2
   m_LocalRotation: {x: -0.17361969, y: -0.17512181, z: -0.6823115, w: 0.68821484}
-  m_LocalPosition: {x: -0.54, y: 0.32, z: 7.15}
+  m_LocalPosition: {x: -0.54, y: 77.5, z: 7.15}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6436,7 +6436,7 @@ Transform:
   m_GameObject: {fileID: 477667130}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.93, y: 2.93, z: -3.11}
+  m_LocalPosition: {x: -1.93, y: 80.110016, z: -3.11}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -10519,7 +10519,7 @@ Transform:
   m_GameObject: {fileID: 750167273}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 77.18002, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -19499,6 +19499,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1367755999}
+  - component: {fileID: 1367756000}
   m_Layer: 0
   m_Name: Theater
   m_TagString: Untagged
@@ -19515,7 +19516,7 @@ Transform:
   m_GameObject: {fileID: 1367755998}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 77.18002, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -19525,6 +19526,37 @@ Transform:
   - {fileID: 140119411}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1367756000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1367755998}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AgentTypeID: 0
+  m_CollectObjects: 0
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: 0, y: 2, z: 0}
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_UseGeometry: 0
+  m_DefaultArea: 0
+  m_GenerateLinks: 0
+  m_IgnoreNavMeshAgent: 1
+  m_IgnoreNavMeshObstacle: 1
+  m_OverrideTileSize: 0
+  m_TileSize: 256
+  m_OverrideVoxelSize: 0
+  m_VoxelSize: 0.16666667
+  m_MinRegionArea: 2
+  m_NavMeshData: {fileID: 23800000, guid: 9cbad6d61cc2cb143b66ff528e73fe3c, type: 2}
+  m_BuildHeightMesh: 0
 --- !u!1001 &1375261141
 PrefabInstance:
   m_ObjectHideFlags: 0

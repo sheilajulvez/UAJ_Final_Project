@@ -53,6 +53,23 @@ public class GameManager : MonoBehaviour
         Debug.Log(voiceRecogniser);
     }
 
+    public void AvanzaPersonaje()
+    {
+        if (currentScene == "Iglesia")
+        {
+            IglesiaPath.Instance.AvanzaRuta();
+            IglesiaTexts.Instance.StartTyping();
+        }
+    }
+
+    public void RetrocedePersonaje()
+    {
+        if (currentScene == "Iglesia")
+        {
+            IglesiaPath.Instance.RetrocedeRuta();
+            IglesiaTexts.Instance.StartTypingR();
+        }
+    }
     /*public void LoadNextScene()
     {
         if (sceneNames.Length == 0) return;

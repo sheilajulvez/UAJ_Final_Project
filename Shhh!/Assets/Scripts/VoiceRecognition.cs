@@ -33,10 +33,8 @@ public class VoiceRecognition : MonoBehaviour
             { "exit", () => BackMenu() },
             { "classic", () => Classic() },
             { "help", () => Controls() },
-            { "move forward", () => MoveForward() },
-            { "left", () => RotateLeft() },
-            { "right", () => RotateRight() },
-            { "stop", () => Stop() },
+            { "go next", () => MoveForward() },
+            { "go back", () => Stop() },
             { "check area", () => CheckArea() }
         };
 
@@ -167,7 +165,7 @@ public class VoiceRecognition : MonoBehaviour
         string n = SceneManager.GetActiveScene().name;
         if (n == "Iglesia" || n == "Mina" || n == "Cine" || n == "Retiro")
         {
-            // TO DO
+            GameManager.Instance.AvanzaPersonaje();
         }
     }
 
@@ -194,7 +192,7 @@ public class VoiceRecognition : MonoBehaviour
         string n = SceneManager.GetActiveScene().name;
         if (n == "Iglesia" || n == "Mina" || n == "Cine" || n == "Retiro")
         {
-            // TO DO
+            GameManager.Instance.RetrocedePersonaje();
         }
     }
     private void CheckArea()
