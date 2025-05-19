@@ -11,6 +11,7 @@ public class MoveAgent : MonoBehaviour
     void Start()
     {
         agente = GetComponent<NavMeshAgent>();
+        GameManager.Instance.SetPlayer(this.gameObject);
     }
 
     void Update()

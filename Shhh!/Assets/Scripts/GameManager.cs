@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
@@ -6,7 +7,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
 
     private bool voiceRecogniser = true;
-    [SerializeField] GameObject Player;
+    private GameObject Player;
     public string[] sceneNames;
     private int currentSceneIndex = 0;
 
@@ -47,6 +48,14 @@ public class GameManager : MonoBehaviour
         return voiceRecogniser;
     }
 
+    public void SetPlayer(GameObject p)
+    {
+        Player = p;
+        Player.GetComponent<NavMeshAgent>().updateRotation = false;
+    }
+
+    public MoveAgent GetPlayer() { return Player.GetComponent<MoveAgent>(); }
+
     public void SetVoiceRecogniser(bool newValue)
     {
         voiceRecogniser = newValue;
@@ -55,19 +64,33 @@ public class GameManager : MonoBehaviour
 
     public void AvanzaPersonaje()
     {
-        if (currentScene == "Iglesia")
+        switch (currentScene)
         {
-            IglesiaPath.Instance.AvanzaRuta();
-            IglesiaTexts.Instance.StartTyping();
+            case "Iglesia":
+                IglesiaPath.Instance.AvanzaRuta();
+                IglesiaTexts.Instance.StartTyping();
+                break;
+            case "Mina":
+                MinePath.Instance.AvanzaRuta();
+                MineTexts.Instance.StartTyping();
+                break;
+
         }
     }
 
     public void RetrocedePersonaje()
     {
-        if (currentScene == "Iglesia")
+        switch (currentScene)
         {
-            IglesiaPath.Instance.RetrocedeRuta();
-            IglesiaTexts.Instance.StartTypingR();
+            case "Iglesia":
+                IglesiaPath.Instance.RetrocedeRuta();
+                IglesiaTexts.Instance.StartTypingR();
+                break;
+            case "Mina":
+                MinePath.Instance.RetrocedeRuta();
+                MineTexts.Instance.StartTypingR();
+                break;
+
         }
     }
     /*public void LoadNextScene()
@@ -100,6 +123,7 @@ public class GameManager : MonoBehaviour
         Debug.Log("Cerrando el juego...");
         Application.Quit();
     }
+
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         if (scene.name == "Menu")
@@ -109,17 +133,17 @@ public class GameManager : MonoBehaviour
                 GameObject.Find("Microphone").SetActive(true);
             }
         }
-        if (Player == null) Player= GameObject.Find("player1");
+        //if (Player == null) Player= GameObject.Find("player1");
 
-        GameObject playerPos = GameObject.Find("playerpos");
-        if (playerPos != null)
-        {
-            Player.transform.position = playerPos.transform.position;
-            Debug.LogWarning(" se encontró el objeto 'PlayerPos' en la escena cargada.");
-        }
-        else
-        {
-            Debug.LogWarning("No se encontró el objeto 'PlayerPos' en la escena cargada.");
-        }
+        //GameObject playerPos = GameObject.Find("playerpos");
+        //if (playerPos != null)
+        //{
+        //    Player.transform.position = playerPos.transform.position;
+        //    Debug.LogWarning(" se encontró el objeto 'PlayerPos' en la escena cargada.");
+        //}
+        //else
+        //{
+        //    Debug.LogWarning("No se encontró el objeto 'PlayerPos' en la escena cargada.");
+        //}
     }
 }
