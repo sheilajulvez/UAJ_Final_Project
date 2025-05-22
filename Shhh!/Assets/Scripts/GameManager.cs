@@ -42,7 +42,10 @@ public class GameManager : MonoBehaviour
         {
             GameObject.Find("Back").GetComponent<Button>().onClick.Invoke(); //retroceder boton menús
         }
-
+        else  if (Input.GetKeyDown(KeyCode.E))
+        {
+            VoiceRecognition.Instance.CheckArea();
+        }
         // Al pulsar Shift Izquierdo
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {

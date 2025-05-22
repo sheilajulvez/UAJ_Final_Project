@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor.SearchService;
+
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -10,15 +10,32 @@ using UnityEngine.Windows.Speech;
 
 public class VoiceRecognition : MonoBehaviour
 {
+    public static VoiceRecognition Instance;
+
     KeywordRecognizer keywordRecognizer;
 
     Dictionary<string, Action> wordToAction;
 
     GameObject controlSave;
-
-    void Start()
+    void Awake()
     {
-        DontDestroyOnLoad(gameObject); // No destruir al cambiar de escena
+        // Implementar Singleton
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject); // No destruir al cambiar de escena
+
+        }
+        else
+        {
+            Destroy(gameObject); // Evitar duplicados
+        }
+
+    }
+      
+void Start()
+    {
+        //DontDestroyOnLoad(gameObject); // No destruir al cambiar de escena
 
         wordToAction = new Dictionary<string, Action>
         {
@@ -219,7 +236,7 @@ public class VoiceRecognition : MonoBehaviour
             GameManager.Instance.RotaIzquierdaPersonaje();
         }
     }
-    private void CheckArea()
+    public void CheckArea()
     {
         string n = SceneManager.GetActiveScene().name;
         if (n == "Retiro" || n == "Cine" || n == "Iglesia" || n == "Mina")
