@@ -579,6 +579,7 @@ MonoBehaviour:
   fadeDuration: 0.5
   myButtonClassic: {fileID: 0}
   myButtonVoice: {fileID: 0}
+  myButtonQuit: {fileID: 0}
 --- !u!225 &158661971
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -715,6 +716,7 @@ MonoBehaviour:
   fadeDuration: 1
   myButtonClassic: {fileID: 0}
   myButtonVoice: {fileID: 0}
+  myButtonQuit: {fileID: 0}
 --- !u!225 &590423757
 CanvasGroup:
   m_ObjectHideFlags: 0

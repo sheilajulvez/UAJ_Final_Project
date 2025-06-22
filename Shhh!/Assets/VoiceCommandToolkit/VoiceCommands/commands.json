@@ -1,0 +1,8 @@
+{
+    "definitions": [
+        {
+            "Command": "example command",
+            "ActionClassName": "ExamplecommandAction"
+        }
+    ]
+}
