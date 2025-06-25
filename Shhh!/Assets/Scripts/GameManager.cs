@@ -184,9 +184,9 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            GameObject.Find("ControlC").SetActive(false);
+            //GameObject.Find("ControlC").SetActive(false);
 
-            if (image != null) image.SetActive(true);
+            //if (image != null) image.SetActive(true);
         }
         //if (Player == null) Player= GameObject.Find("player1");
 
