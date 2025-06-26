@@ -161,12 +161,14 @@ public class GameManager : MonoBehaviour
             if (voiceRecogniser)
             {
                 GameObject.Find("Microphone").SetActive(true);
+                GameObject.Find("Control").SetActive(true);
                 GameObject.Find("ControlC").SetActive(false);
 
             }
             else
             {
                 GameObject.Find("Control").SetActive(false);
+                GameObject.Find("ControlC").SetActive(true);
             }
             image = GameObject.Find("spaceImage");
             image.SetActive(false);

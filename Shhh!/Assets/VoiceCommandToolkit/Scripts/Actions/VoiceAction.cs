@@ -11,14 +11,5 @@ public class VoiceAction : IVoiceAction
         {
             GameManager.Instance.LoadScene("Menu");
         }
-        else if (SceneManager.GetActiveScene().name == "Menu")
-        {
-            GameObject voice = GameObject.Find("Voice");
-            if (voice != null)
-            {
-                voice.GetComponent<Button>().onClick.Invoke();
-            }
-
-        }
     }
 }

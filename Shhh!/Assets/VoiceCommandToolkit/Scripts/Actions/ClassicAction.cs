@@ -7,7 +7,7 @@ public class ClassicAction : IVoiceAction
 {
     public void Execute()
     {
-        if (SceneManager.GetActiveScene().name == "Menu")
+        if (SceneManager.GetActiveScene().name == "Selection")
         {
             GameObject classic = GameObject.Find("Classic");
             if (classic != null)
@@ -29,7 +29,7 @@ public class ClassicAction : IVoiceAction
         }
         else
         {
-            Debug.LogWarning("El comando 'classic' solo está disponible desde la escena 'Menu'.");
+            Debug.LogWarning("El comando 'classic' solo está disponible desde la escena 'Selection'.");
         }
     }
 }

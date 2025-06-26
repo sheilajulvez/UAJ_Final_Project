@@ -4,8 +4,6 @@
             "Command": "move",
             "ActionClassName": "MoveAction"
         },
-       
-
         {
             "Command": "voice",
             "ActionClassName": "VoiceAction"
@@ -14,7 +12,6 @@
             "Command": "play",
             "ActionClassName": "PlayAction"
         },
-
         {
             "Command": "quit",
             "ActionClassName": "QuitAction"
@@ -25,14 +22,12 @@
         },
         {
             "Command": "back",
-            "ActionClassName": "ExitAction"
+            "ActionClassName": "BackAction"
         },
-
         {
             "Command": "microphone",
             "ActionClassName": "MicrophoneAction"
         },
-
         {
             "Command": "classic",
             "ActionClassName": "ClassicAction"
@@ -41,7 +36,6 @@
             "Command": "help",
             "ActionClassName": "HelpAction"
         },
-
         {
             "Command": "left",
             "ActionClassName": "LeftAction"
@@ -50,8 +44,6 @@
             "Command": "right",
             "ActionClassName": "RightAction"
         },
-
-      
         {
             "Command": "up",
             "ActionClassName": "UpAction"
@@ -60,40 +52,30 @@
             "Command": "down",
             "ActionClassName": "DownAction"
         },
-
         {
             "Command": "pick",
             "ActionClassName": "PickAction"
         },
         {
             "Command": "coin",
-            "ActionClassName": "PickAction"
+            "ActionClassName": "CoinAction"
         },
-
         {
             "Command": "menu",
             "ActionClassName": "MenuAction"
         },
-
-       
         {
             "Command": "go to park",
             "ActionClassName": "GotoparkAction"
         },
-
-       
         {
             "Command": "go to mine",
             "ActionClassName": "GotomineAction"
         },
-
-        
         {
             "Command": "go to cinema",
             "ActionClassName": "GotocinemaAction"
         },
-
-        
         {
             "Command": "go to church",
             "ActionClassName": "GotochurchAction"
