@@ -11,7 +11,11 @@ public class VoiceInputEngine : MonoBehaviour
     private DictationRecognizer dictationRecognizer;
     private string[] commandsBase;
     public TextMeshProUGUI hypothesisText;
-    
+    public Image panelImage;
+    public Sprite valid;
+    public Sprite invalid;
+
+
     // Evento con comando y parámetros
     public event Action<string, object[]> OnCommandRecognized;
 
@@ -56,7 +60,18 @@ public class VoiceInputEngine : MonoBehaviour
             {
                 matchedCommand = cmd;
                 Debug.Log($"[VoiceInputEngine] Comando base detectado: '{matchedCommand}'");
+                if (hypothesisText != null)
+                {
+                    // Cambiar el color a rojo (por ejemplo)
+                    panelImage.sprite = valid;
+                    hypothesisText.text =  text;
+                }
                 break;
+            }
+            else
+            {
+                panelImage.sprite = invalid;
+                hypothesisText.text =text;
             }
         }
 
@@ -65,8 +80,9 @@ public class VoiceInputEngine : MonoBehaviour
             Debug.LogWarning($"[VoiceInputEngine] Comando no reconocido en frase: '{phrase}'");
             return;
         }
+        
 
-        string paramsString = phrase.Substring(matchedCommand.Length).Trim();
+            string paramsString = phrase.Substring(matchedCommand.Length).Trim();
         Debug.Log($"[VoiceInputEngine] Parámetros extraídos como texto: '{paramsString}'");
 
         object[] parameters;

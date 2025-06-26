@@ -62,6 +62,7 @@ public class GameManager : MonoBehaviour
         
     }
 
+
     public void SetCoinsCollected(int newValue)
     {
         coinsCollected = newValue;
