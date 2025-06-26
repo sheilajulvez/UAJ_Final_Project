@@ -3,12 +3,15 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Windows.Speech;
 using System.Collections;
+using UnityEngine.UI;
+using TMPro;
 
 public class VoiceInputEngine : MonoBehaviour
 {
     private DictationRecognizer dictationRecognizer;
     private string[] commandsBase;
-
+    public TextMeshProUGUI hypothesisText;
+    
     // Evento con comando y parámetros
     public event Action<string, object[]> OnCommandRecognized;
 
@@ -88,6 +91,10 @@ public class VoiceInputEngine : MonoBehaviour
     {
         Debug.Log($"[VoiceInputEngine] Hipótesis dictation: '{text}'");
 
+        if (hypothesisText != null)
+        {
+            hypothesisText.text = "Escuchando: " + text;
+        }
         // Llamamos al mismo método que procesa el resultado,
         // pero con un nivel de confianza medio para distinguir
         DictationRecognizer_DictationResult(text, ConfidenceLevel.Medium);
