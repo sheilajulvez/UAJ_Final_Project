@@ -1,0 +1,17 @@
+{
+    "name": "AudioDetection.Editor",
+    "rootNamespace": "",
+    "references": [
+        "AudioDetection",
+        "AudioDetection.Interfaces"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

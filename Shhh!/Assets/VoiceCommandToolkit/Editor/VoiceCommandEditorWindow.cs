@@ -88,6 +88,12 @@ public class VoiceCommandEditorWindow : EditorWindow {
 
         string json = JsonUtility.ToJson(list, true);
         string path = "Assets/VoiceCommandToolkit/VoiceCommands/commands.json";
+
+        if (!Directory.Exists("Assets/VoiceCommandToolkit/VoiceCommands"))
+        {
+            Directory.CreateDirectory("Assets/VoiceCommandToolkit/VoiceCommands");
+        }
+
         File.WriteAllText(path, json);
     }
 
