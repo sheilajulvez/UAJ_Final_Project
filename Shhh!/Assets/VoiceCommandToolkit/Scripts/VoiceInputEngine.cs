@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Windows.Speech;
+using System.Collections;
 
 public class VoiceInputEngine : MonoBehaviour
 {
@@ -93,17 +94,46 @@ public class VoiceInputEngine : MonoBehaviour
     }
 
 
+    private bool isRestarting = false;
+
     private void DictationRecognizer_DictationComplete(DictationCompletionCause cause)
     {
         Debug.Log($"[VoiceInputEngine] Dictation complete: {cause}");
-
-        // Reinicia el reconocedor después de cada reconocimiento completo
-        if (dictationRecognizer != null && dictationRecognizer.Status != SpeechSystemStatus.Running)
+        if (cause != DictationCompletionCause.Complete && !isRestarting)
         {
-            Debug.Log("[VoiceInputEngine] Reiniciando DictationRecognizer...");
-            dictationRecognizer.Start();
+            Debug.LogWarning("[VoiceInputEngine] Dictation finalizó inesperadamente. Reiniciando...");
+
+            isRestarting = true;
+
+            // Parar y liberar la instancia actual
+            dictationRecognizer.Stop();
+            dictationRecognizer.Dispose();
+            dictationRecognizer = null;
+
+            // Reiniciar con un pequeño retraso para evitar conflictos
+            StartCoroutine(RestartDictationAfterDelay(1f));
         }
     }
+
+    private IEnumerator RestartDictationAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        // Recrear el DictationRecognizer y volver a inicializarlo
+        dictationRecognizer = new DictationRecognizer();
+
+        dictationRecognizer.DictationResult += DictationRecognizer_DictationResult;
+        dictationRecognizer.DictationHypothesis += DictationRecognizer_DictationHypothesis;
+        dictationRecognizer.DictationComplete += DictationRecognizer_DictationComplete;
+        dictationRecognizer.DictationError += DictationRecognizer_DictationError;
+
+        dictationRecognizer.Start();
+
+        Debug.Log("[VoiceInputEngine] DictationRecognizer reiniciado.");
+
+        isRestarting = false;
+    }
+
 
 
     private void DictationRecognizer_DictationError(string error, int hresult)
