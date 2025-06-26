@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class MoveAction : IVoiceAction
@@ -9,12 +7,10 @@ public class MoveAction : IVoiceAction
         GameObject player = GameObject.FindWithTag("Player");
         if (player != null)
         {
-            Vector3 destino = player.transform.position + player.transform.forward * 5f;
-            Debug.Log("Destino: " + destino);
-            var agente = player.GetComponent<MoveAgent>();
-            if (agente != null)
+            var mover = player.GetComponent<MoveAgent>();
+            if (mover != null)
             {
-                agente.IniciarMovimimiento(destino);
+                mover.IniciarMovimiento();
             }
             else
             {
@@ -27,3 +23,4 @@ public class MoveAction : IVoiceAction
         }
     }
 }
+

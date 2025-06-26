@@ -92,8 +92,6 @@ public class GameManager : MonoBehaviour
     public void SetPlayer(GameObject p)
     {
         Player = p;
-        Player.GetComponent<NavMeshAgent>().updateRotation = false;
-        Player.GetComponent<NavMeshAgent>().updatePosition = false;
     }
 
     public MoveAgent GetPlayer() { return Player.GetComponent<MoveAgent>(); }
@@ -118,10 +116,8 @@ public class GameManager : MonoBehaviour
         //        break;
 
         //}
-        Vector3 destino = Player.transform.position + Player.transform.forward * 5f;
 
-        Debug.Log(destino.ToString());
-        Player.GetComponent<MoveAgent>().IniciarMovimimiento(destino);
+        Player.GetComponent<MoveAgent>().IniciarMovimiento();
     }
 
     public void RotaDerechaPersonaje()

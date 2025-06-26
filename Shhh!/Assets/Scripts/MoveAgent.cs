@@ -1,61 +1,41 @@
 using UnityEngine;
-using UnityEngine.AI;
 
 public class MoveAgent : MonoBehaviour
 {
-    private NavMeshAgent agente;
-    private Transform[] puntosRuta;
-    private int indiceActual = 0;
-    private bool rutaActiva = false;
+    private Vector3 direccionMovimiento;
+    private float distanciaTotal = 5f;
+    private float distanciaRecorrida = 0f;
+    private bool enMovimiento = false;
+    public float velocidad = 3f;
 
     void Start()
     {
-        agente = GetComponent<NavMeshAgent>();
         GameManager.Instance.SetPlayer(this.gameObject);
     }
 
     void Update()
     {
-        if (!agente.pathPending && !agente.hasPath)
+        if (enMovimiento)
         {
-            agente.updatePosition = false;
-        }
+            float paso = velocidad * Time.deltaTime;
+            transform.position += direccionMovimiento * paso;
+            distanciaRecorrida += paso;
 
-
-        if (!rutaActiva || puntosRuta == null || puntosRuta.Length == 0)
-            return;
-
-        if (!agente.pathPending && agente.remainingDistance < 0.5f)
-        {
-            AvanzarAlSiguientePunto();
+            if (distanciaRecorrida >= distanciaTotal)
+            {
+                enMovimiento = false;
+                distanciaRecorrida = 0f;
+            }
         }
     }
 
-    public void IniciarRuta(Transform[] nuevaRuta)
+    public void IniciarMovimiento()
     {
-        puntosRuta = nuevaRuta;
-        indiceActual = 0;
-        rutaActiva = true;
-        agente.SetDestination(puntosRuta[indiceActual].position);
-    }
-
-    public void IniciarMovimimiento(Vector3 nuevaRuta)
-    {
-        agente.Warp(transform.position);
-        agente.updatePosition = true;
-        agente.SetDestination(nuevaRuta);
-    }
-
-    private void AvanzarAlSiguientePunto()
-    {
-        indiceActual++;
-        if (indiceActual < puntosRuta.Length)
+        if (!enMovimiento)
         {
-            agente.SetDestination(puntosRuta[indiceActual].position);
-        }
-        else
-        {
-            rutaActiva = false; // Ruta terminada
+            direccionMovimiento = transform.forward.normalized;
+            distanciaRecorrida = 0f;
+            enMovimiento = true;
         }
     }
 }
