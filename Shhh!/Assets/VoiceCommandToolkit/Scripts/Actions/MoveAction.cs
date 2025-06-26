@@ -1,8 +1,9 @@
 using UnityEngine;
+using AudioDetection.Interfaces;
 
 public class MoveAction : IVoiceAction
 {
-    public void Execute()
+    public void Execute(params object[] parameters)
     {
         GameObject player = GameObject.FindWithTag("Player");
         if (player != null)

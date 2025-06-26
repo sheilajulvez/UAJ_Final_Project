@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
+using AudioDetection.Interfaces;
 public class CoinAction : IVoiceAction {
-    public void Execute() {
+    public void Execute(params object[] parameters) {
 
         string currentScene = SceneManager.GetActiveScene().name;
         if (currentScene == "Retiro" || currentScene == "Cine" || currentScene == "Iglesia" || currentScene == "Mina")

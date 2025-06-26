@@ -1,10 +1,10 @@
 using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
+using  AudioDetection.Interfaces;
 public class GotoparkAction : IVoiceAction
 {
-    public void Execute()
+    public void Execute(params object[] parameters)
     {
         string currentScene = SceneManager.GetActiveScene().name;
 

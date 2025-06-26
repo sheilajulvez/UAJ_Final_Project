@@ -2,9 +2,10 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement; // Necesario para SceneManager
+using AudioDetection.Interfaces;
 public class GotocinemaAction : IVoiceAction
 {
-    public void Execute()
+    public void Execute(params object[] parameters)
     {
         string currentScene = SceneManager.GetActiveScene().name;
 

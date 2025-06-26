@@ -1,8 +1,8 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
+using AudioDetection.Interfaces;
 public class MenuAction : IVoiceAction {
-    public void Execute()
+    public void Execute(params object[] parameters)
     {
         string currentScene = SceneManager.GetActiveScene().name;
 

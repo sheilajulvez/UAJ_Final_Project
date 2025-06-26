@@ -1,10 +1,10 @@
 using System;
 using UnityEngine;
 using UnityEngine.SceneManagement; // Necesario para SceneManager
-
+using AudioDetection.Interfaces;
 public class GotochurchAction : IVoiceAction
 {
-    public void Execute()
+    public void Execute(params object[] parameters)
     {
         string currentScene = SceneManager.GetActiveScene().name;
 

@@ -2,10 +2,10 @@ using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-
+using AudioDetection.Interfaces;
 public class MicrophoneAction : IVoiceAction
 {
-    public void Execute()
+    public void Execute(params object[] parameters)
     {
         if (SceneManager.GetActiveScene().name == "Menu")
         {

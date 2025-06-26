@@ -1,15 +1,19 @@
+
 using System;
 using System.Collections.Generic;
 
 
-// Definicion para estructurar el JSON y que el VoiceLoader sepa leerlo
+
 [Serializable]
-public class VoiceCommandDefinition {
+public class VoiceCommandDefinition
+{
     public string Command;
     public string ActionClassName;
+    public List<string> Parameters;
 }
 
 [Serializable]
-public class VoiceCommandDefinitionList {
+public class VoiceCommandDefinitionList
+{
     public List<VoiceCommandDefinition> definitions;
 }

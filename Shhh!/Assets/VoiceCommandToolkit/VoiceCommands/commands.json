@@ -1,84 +1,24 @@
 {
     "definitions": [
         {
-            "Command": "move",
-            "ActionClassName": "MoveAction"
-        },
-        {
             "Command": "voice",
-            "ActionClassName": "VoiceAction"
+            "ActionClassName": "VoiceAction",
+            "Parameters": []
         },
         {
             "Command": "play",
-            "ActionClassName": "PlayAction"
+            "ActionClassName": "PlayAction",
+            "Parameters": []
         },
         {
-            "Command": "quit",
-            "ActionClassName": "QuitAction"
-        },
-        {
-            "Command": "exit",
-            "ActionClassName": "ExitAction"
-        },
-        {
-            "Command": "back",
-            "ActionClassName": "BackAction"
-        },
-        {
-            "Command": "microphone",
-            "ActionClassName": "MicrophoneAction"
-        },
-        {
-            "Command": "classic",
-            "ActionClassName": "ClassicAction"
-        },
-        {
-            "Command": "help",
-            "ActionClassName": "HelpAction"
-        },
-        {
-            "Command": "left",
-            "ActionClassName": "LeftAction"
-        },
-        {
-            "Command": "right",
-            "ActionClassName": "RightAction"
-        },
-        {
-            "Command": "up",
-            "ActionClassName": "UpAction"
-        },
-        {
-            "Command": "down",
-            "ActionClassName": "DownAction"
-        },
-        {
-            "Command": "pick",
-            "ActionClassName": "PickAction"
-        },
-        {
-            "Command": "coin",
-            "ActionClassName": "CoinAction"
-        },
-        {
-            "Command": "menu",
-            "ActionClassName": "MenuAction"
-        },
-        {
-            "Command": "go to park",
-            "ActionClassName": "GotoparkAction"
-        },
-        {
-            "Command": "go to mine",
-            "ActionClassName": "GotomineAction"
-        },
-        {
-            "Command": "go to cinema",
-            "ActionClassName": "GotocinemaAction"
-        },
-        {
-            "Command": "go to church",
-            "ActionClassName": "GotochurchAction"
+            "Command": "go",
+            "ActionClassName": "GoAction",
+            "Parameters": [
+                "mine",
+                "church",
+                "retiro",
+                "cine"
+            ]
         }
     ]
 }

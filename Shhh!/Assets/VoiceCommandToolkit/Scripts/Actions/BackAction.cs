@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-
+using AudioDetection.Interfaces;
 public class BackAction : IVoiceAction {
-    public void Execute() {
+    public void Execute(params object[] parameters) {
         if (SceneManager.GetActiveScene().name != "Selection" && SceneManager.GetActiveScene().name != "Victory")
         {
             GameObject back = GameObject.Find("Back");

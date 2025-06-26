@@ -1,3 +1,7 @@
-public interface IVoiceAction { // Interfaz de la que heredan todas las acciones/comandos creados
-    void Execute();
+namespace AudioDetection.Interfaces
+{
+    public interface IVoiceAction
+    {
+        void Execute(params object[] parameters);
+    }
 }
