@@ -39,6 +39,7 @@ public class VoiceInputEngine : MonoBehaviour
 
     private void DictationRecognizer_DictationResult(string text, ConfidenceLevel confidence)
     {
+        Debug.Log("cheking");
         string phrase = text.Trim();
         Debug.Log($"[VoiceInputEngine] Dictation resultado: '{phrase}' (confianza: {confidence})");
 
@@ -85,17 +86,25 @@ public class VoiceInputEngine : MonoBehaviour
     private void DictationRecognizer_DictationHypothesis(string text)
     {
         Debug.Log($"[VoiceInputEngine] Hipótesis dictation: '{text}'");
+
+        // Llamamos al mismo método que procesa el resultado,
+        // pero con un nivel de confianza medio para distinguir
+        DictationRecognizer_DictationResult(text, ConfidenceLevel.Medium);
     }
+
 
     private void DictationRecognizer_DictationComplete(DictationCompletionCause cause)
     {
         Debug.Log($"[VoiceInputEngine] Dictation complete: {cause}");
-        if (cause != DictationCompletionCause.Complete)
+
+        // Reinicia el reconocedor después de cada reconocimiento completo
+        if (dictationRecognizer != null && dictationRecognizer.Status != SpeechSystemStatus.Running)
         {
-            Debug.LogWarning("[VoiceInputEngine] Dictation finalizó inesperadamente. Reiniciando...");
+            Debug.Log("[VoiceInputEngine] Reiniciando DictationRecognizer...");
             dictationRecognizer.Start();
         }
     }
+
 
     private void DictationRecognizer_DictationError(string error, int hresult)
     {

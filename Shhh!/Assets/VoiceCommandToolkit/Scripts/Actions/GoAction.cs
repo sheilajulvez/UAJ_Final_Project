@@ -3,12 +3,12 @@ using UnityEngine;
 using UnityEngine.SceneManagement; // Para SceneManager
 using AudioDetection.Interfaces;
 
-
-public class GoAction : IVoiceAction {
+public class GoAction : IVoiceAction
+{
     public void Execute(params object[] parameters)
     {
         Debug.Log("go to");
-        // Loguear todos los parámetros recibidos
+
         if (parameters == null || parameters.Length == 0)
         {
             Debug.LogWarning("GotoAction: No se proporcionó ningún parámetro para la escena destino.");
@@ -19,7 +19,6 @@ public class GoAction : IVoiceAction {
             Debug.Log($"GotoAction: Parámetros recibidos ({parameters.Length}): {string.Join(", ", parameters)}");
         }
 
-        // Intentamos obtener el nombre de la escena destino como string
         string targetScene = parameters[0] as string;
         if (string.IsNullOrWhiteSpace(targetScene))
         {
@@ -29,17 +28,38 @@ public class GoAction : IVoiceAction {
 
         string currentScene = SceneManager.GetActiveScene().name;
 
-        // Comprobar si la escena actual permite el cambio (lista blanca)
+        // Comprobar lista blanca de escenas desde donde se puede cambiar
         string[] allowedScenes = { "Retiro", "Cine", "Iglesia", "Mina" };
 
-        if (Array.Exists(allowedScenes, scene => scene.Equals(currentScene, StringComparison.OrdinalIgnoreCase)))
-        {
-            Debug.Log($"GotoAction: Cargando escena '{targetScene}' desde '{currentScene}'.");
-            GameManager.Instance.LoadScene(targetScene);
-        }
-        else
+        if (!Array.Exists(allowedScenes, scene => scene.Equals(currentScene, StringComparison.OrdinalIgnoreCase)))
         {
             Debug.LogWarning($"GotoAction: No se puede ir a '{targetScene}' desde la escena '{currentScene}'.");
+            return;
         }
+
+        // Comprobar si la escena destino existe en Build Settings
+        if (!SceneExistsInBuildSettings(targetScene))
+        {
+            Debug.LogWarning($"GotoAction: La escena destino '{targetScene}' no está incluida en Build Settings o no existe.");
+            return;
+        }
+
+        Debug.Log($"GotoAction: Cargando escena '{targetScene}' desde '{currentScene}'.");
+        GameManager.Instance.LoadScene(targetScene);
+    }
+
+    private bool SceneExistsInBuildSettings(string sceneName)
+    {
+        int sceneCount = SceneManager.sceneCountInBuildSettings;
+        for (int i = 0; i < sceneCount; i++)
+        {
+            string scenePath = SceneUtility.GetScenePathByBuildIndex(i);
+            string sceneNameFromPath = System.IO.Path.GetFileNameWithoutExtension(scenePath);
+            if (string.Equals(sceneNameFromPath, sceneName, StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }

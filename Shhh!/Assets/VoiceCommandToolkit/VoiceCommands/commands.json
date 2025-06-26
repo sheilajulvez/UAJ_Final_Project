@@ -13,12 +13,57 @@
         {
             "Command": "go",
             "ActionClassName": "GoAction",
-            "Parameters": [
-                "mine",
-                "church",
-                "retiro",
-                "cine"
-            ]
+            "Parameters": [ "sceneName" ]
+        },
+        {
+            "Command": "quit",
+            "ActionClassName": "QuitAction",
+            "Parameters": []
+        },
+        {
+            "Command": "microphone",
+            "ActionClassName": "MicrohponeAction",
+            "Parameters": []
+        },
+        {
+            "Command": "exit",
+            "ActionClassName": "ExitAction",
+            "Parameters": []
+        },
+        {
+            "Command": "back",
+            "ActionClassName": "BackAction",
+            "Parameters": []
+        },
+        {
+            "Command": "classic",
+            "ActionClassName": "ClassicAction",
+            "Parameters": []
+        },
+        {
+            "Command": "help",
+            "ActionClassName": "HelpAction",
+            "Parameters": []
+        },
+        {
+            "Command": "move",
+            "ActionClassName": "MoveAction",
+            "Parameters": []
+        },
+        {
+            "Command": "Look",
+            "ActionClassName": "LookAction",
+            "Parameters": ["Direction"]
+        },
+        {
+            "Command": "pick",
+            "ActionClassName": "CheckAreaAction",
+            "Parameters": []
+        },
+        {
+            "Command": "coin",
+            "ActionClassName": "CheckAreaAction",
+            "Parameters": []
         }
     ]
 }
