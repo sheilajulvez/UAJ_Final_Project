@@ -13,7 +13,8 @@ namespace AudioDetection.Editor
         [MenuItem("Tools/Voice Command Editor")]
         public static void ShowWindow()
         {
-            GetWindow<VoiceCommandEditorWindow>("Voice Command Editor");
+            var window = GetWindow<VoiceCommandEditorWindow>("Voice Command Editor");
+            window.LoadCommandsFromJSON(); //Carga los comandos existentes
         }
 
         private void OnGUI()
@@ -137,6 +138,20 @@ namespace AudioDetection.Editor
                 }}
             }}";
                 File.WriteAllText(filePath, template);
+            }
+        }
+
+        private void LoadCommandsFromJSON()
+        {
+            string path = "Assets/VoiceCommandToolkit/VoiceCommands/commands.json";
+            if (!File.Exists(path)) return;
+
+            string json = File.ReadAllText(path);
+            var list = JsonUtility.FromJson<VoiceCommandDefinitionList>(json);
+            commands.Clear();
+            foreach (var def in list.definitions)
+            {
+                commands.Add(def.Command.ToLower());
             }
         }
     }
