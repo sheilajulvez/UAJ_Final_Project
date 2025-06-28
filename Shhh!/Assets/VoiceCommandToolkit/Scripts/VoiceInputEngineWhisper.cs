@@ -9,18 +9,13 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class VoiceInputEngineWhisper : MonoBehaviour, IVoiceInputEngine
+public class VoiceInputEngineWhisper : BaseVoiceInputEngine
 {
-    public TextMeshProUGUI hypothesisText;
-    public Image panelImage;
-    public Sprite valid;
-    public Sprite invalid;
-
     private string whisperFolder => Path.Combine(Application.streamingAssetsPath, "Whisper");
     private string whisperCliPath => Path.Combine(whisperFolder, "whisper-cli.exe");
     private string audioFilePath;
 
-    public event Action<string, object[]> OnCommandRecognized;
+    public override event Action<string, object[]> OnCommandRecognized;
 
     [SerializeField]
     private float durationSeconds = 5.0f;
@@ -32,7 +27,7 @@ public class VoiceInputEngineWhisper : MonoBehaviour, IVoiceInputEngine
     private AudioClip recordingClip;
     private int sampleRate = 16000;  // whisper funciona bien con 16kHz
 
-    public void Initialize(string[] commands)
+    public override void Initialize(string[] commands)
     {
         commandsBase = commands;
 
@@ -55,9 +50,9 @@ public class VoiceInputEngineWhisper : MonoBehaviour, IVoiceInputEngine
     {
         if (Microphone.devices.Length == 0)
         {
-            UnityEngine.Debug.LogError("No hay micrófono disponible.");
+            UnityEngine.Debug.LogError("No hay micrï¿½fono disponible.");
             if (hypothesisText != null)
-                hypothesisText.text = "No hay micrófono disponible";
+                hypothesisText.text = "No hay micrï¿½fono disponible";
             return;
         }
 
@@ -66,11 +61,11 @@ public class VoiceInputEngineWhisper : MonoBehaviour, IVoiceInputEngine
 
         if (recordingClip == null)
         {
-            UnityEngine.Debug.LogError("No se pudo iniciar la grabación.");
+            UnityEngine.Debug.LogError("No se pudo iniciar la grabaciï¿½n.");
             return;
         }
 
-        UnityEngine.Debug.Log("Grabación iniciada");
+        UnityEngine.Debug.Log("Grabaciï¿½n iniciada");
     }
 
     private IEnumerator WaitAndProcessRecording(float duration)
@@ -84,7 +79,7 @@ public class VoiceInputEngineWhisper : MonoBehaviour, IVoiceInputEngine
 
         Microphone.End(null);
 
-        UnityEngine.Debug.Log("Grabación terminada. Guardando archivo WAV...");
+        UnityEngine.Debug.Log("Grabaciï¿½n terminada. Guardando archivo WAV...");
 
         WavUtils.Save(audioFilePath, recordingClip);
 
@@ -99,7 +94,7 @@ public class VoiceInputEngineWhisper : MonoBehaviour, IVoiceInputEngine
         ProcessTranscription(transcription);
 
 
-        // Espera 1 segundo para mostrar el resultado antes de la siguiente grabación
+        // Espera 1 segundo para mostrar el resultado antes de la siguiente grabaciï¿½n
         yield return new WaitForSeconds(waitNextCommandSeconds);
     }
 
@@ -107,12 +102,12 @@ public class VoiceInputEngineWhisper : MonoBehaviour, IVoiceInputEngine
     {
         if (!File.Exists(whisperCliPath))
         {
-            UnityEngine.Debug.LogError("No se encontró whisper-cli en: " + whisperCliPath);
+            UnityEngine.Debug.LogError("No se encontrï¿½ whisper-cli en: " + whisperCliPath);
             return "";
         }
         if (!File.Exists(audioPath))
         {
-            UnityEngine.Debug.LogError("No se encontró el audio en: " + audioPath);
+            UnityEngine.Debug.LogError("No se encontrï¿½ el audio en: " + audioPath);
             return "";
         }
 
@@ -164,7 +159,7 @@ public class VoiceInputEngineWhisper : MonoBehaviour, IVoiceInputEngine
             return;
         }
 
-        // Limpiar puntuación al final, ejemplo quitando punto, coma, signo de interrogación, etc.
+        // Limpiar puntuaciï¿½n al final, ejemplo quitando punto, coma, signo de interrogaciï¿½n, etc.
         string phrase = transcription.ToLower().Trim().TrimEnd('.', ',', '!', '?');
 
         if (phrase.Length < 3)
@@ -176,7 +171,7 @@ public class VoiceInputEngineWhisper : MonoBehaviour, IVoiceInputEngine
             return;
         }
 
-        // Opcional: filtro para palabras irrelevantes típicas (como "you", "uh", etc)
+        // Opcional: filtro para palabras irrelevantes tï¿½picas (como "you", "uh", etc)
         string[] ignoreWords = { "you", "uh", "um", "ah", "mm" };
         if (ignoreWords.Contains(phrase.ToLower()))
         {
@@ -187,7 +182,7 @@ public class VoiceInputEngineWhisper : MonoBehaviour, IVoiceInputEngine
             return;
         }
 
-        // Resto del código para buscar comandos...
+        // Resto del cï¿½digo para buscar comandos...
         string matchedCommand = null;
         foreach (var cmd in commandsBase)
         {

@@ -7,24 +7,19 @@ using UnityEngine.UI;
 using TMPro;
 using AudioDetection.Interfaces;
 
-public class VoiceInputEngineWindows : MonoBehaviour, IVoiceInputEngine
+public class VoiceInputEngineWindows : BaseVoiceInputEngine
 {
     private DictationRecognizer dictationRecognizer;
     private string[] commandsBase;
-    public TextMeshProUGUI hypothesisText;
-    public Image panelImage;
-    public Sprite valid;
-    public Sprite invalid;
 
-
-    // Evento con comando y parámetros
-    public event Action<string, object[]> OnCommandRecognized;
+    // Evento con comando y parï¿½metros
+    public override event Action<string, object[]> OnCommandRecognized;
 
     /// <summary>
     /// Inicializa el dictation recognizer con los comandos base para parseo.
     /// </summary>
     /// <param name="commands">Lista de comandos base (ej: "activar luces")</param>
-    public void Initialize(string[] commands)
+    public override void Initialize(string[] commands)
     {
         if (commands == null || commands.Length == 0)
         {
@@ -86,35 +81,35 @@ public class VoiceInputEngineWindows : MonoBehaviour, IVoiceInputEngine
         
 
             string paramsString = phrase.Substring(matchedCommand.Length).Trim();
-        Debug.Log($"[VoiceInputEngine] Parámetros extraídos como texto: '{paramsString}'");
+        Debug.Log($"[VoiceInputEngine] Parï¿½metros extraï¿½dos como texto: '{paramsString}'");
 
         object[] parameters;
 
         if (string.IsNullOrEmpty(paramsString))
         {
             parameters = Array.Empty<object>();
-            Debug.Log("[VoiceInputEngine] No se detectaron parámetros.");
+            Debug.Log("[VoiceInputEngine] No se detectaron parï¿½metros.");
         }
         else
         {
             var splitParams = paramsString.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
             parameters = splitParams.Cast<object>().ToArray();
-            Debug.Log($"[VoiceInputEngine] Parámetros separados: {string.Join(", ", splitParams)}");
+            Debug.Log($"[VoiceInputEngine] Parï¿½metros separados: {string.Join(", ", splitParams)}");
         }
 
-        Debug.Log($"[VoiceInputEngine] Lanzando evento OnCommandRecognized con comando '{matchedCommand}' y {parameters.Length} parámetros.");
+        Debug.Log($"[VoiceInputEngine] Lanzando evento OnCommandRecognized con comando '{matchedCommand}' y {parameters.Length} parï¿½metros.");
         OnCommandRecognized?.Invoke(matchedCommand, parameters);
     }
 
     private void DictationRecognizer_DictationHypothesis(string text)
     {
-        Debug.Log($"[VoiceInputEngine] Hipótesis dictation: '{text}'");
+        Debug.Log($"[VoiceInputEngine] Hipï¿½tesis dictation: '{text}'");
 
         if (hypothesisText != null)
         {
             hypothesisText.text = "Escuchando: " + text;
         }
-        // Llamamos al mismo método que procesa el resultado,
+        // Llamamos al mismo mï¿½todo que procesa el resultado,
         // pero con un nivel de confianza medio para distinguir
         DictationRecognizer_DictationResult(text, ConfidenceLevel.Medium);
     }
@@ -127,7 +122,7 @@ public class VoiceInputEngineWindows : MonoBehaviour, IVoiceInputEngine
         Debug.Log($"[VoiceInputEngine] Dictation complete: {cause}");
         if (cause != DictationCompletionCause.Complete && !isRestarting)
         {
-            Debug.LogWarning("[VoiceInputEngine] Dictation finalizó inesperadamente. Reiniciando...");
+            Debug.LogWarning("[VoiceInputEngine] Dictation finalizï¿½ inesperadamente. Reiniciando...");
 
             isRestarting = true;
 
@@ -136,7 +131,7 @@ public class VoiceInputEngineWindows : MonoBehaviour, IVoiceInputEngine
             dictationRecognizer.Dispose();
             dictationRecognizer = null;
 
-            // Reiniciar con un pequeño retraso para evitar conflictos
+            // Reiniciar con un pequeï¿½o retraso para evitar conflictos
             StartCoroutine(RestartDictationAfterDelay(1f));
         }
     }
@@ -166,16 +161,16 @@ public class VoiceInputEngineWindows : MonoBehaviour, IVoiceInputEngine
     {
         Debug.LogError($"[VoiceInputEngine] Dictation error: {error}; HResult = {hresult}");
 
-        // Verificar el código de error específico que indica que el reconocimiento está desactivado
+        // Verificar el cï¿½digo de error especï¿½fico que indica que el reconocimiento estï¿½ desactivado
         const int ERROR_DICTATION_DISABLED = unchecked((int)0x80045509); // HResult de ese error
 
         if (hresult == ERROR_DICTATION_DISABLED)
         {
-            Debug.LogError("El reconocimiento por voz no está activado en el sistema. Por favor ve a Configuración > Privacidad > Voz y activa el reconocimiento en línea.");
+            Debug.LogError("El reconocimiento por voz no estï¿½ activado en el sistema. Por favor ve a Configuraciï¿½n > Privacidad > Voz y activa el reconocimiento en lï¿½nea.");
             OpenVoiceSettings();
         }
 
-        // Aquí puedes parar el recognizer o notificar al usuario desde la UI
+        // Aquï¿½ puedes parar el recognizer o notificar al usuario desde la UI
     }
 
     private void OpenVoiceSettings()
@@ -186,7 +181,7 @@ public class VoiceInputEngineWindows : MonoBehaviour, IVoiceInputEngine
         }
         catch (Exception e)
         {
-            Debug.LogWarning("No se pudo abrir la configuración de privacidad de voz: " + e.Message);
+            Debug.LogWarning("No se pudo abrir la configuraciï¿½n de privacidad de voz: " + e.Message);
         }
     }
 
