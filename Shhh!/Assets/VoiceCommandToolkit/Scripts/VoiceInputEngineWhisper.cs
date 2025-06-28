@@ -119,7 +119,7 @@ public class VoiceInputEngineWhisper : MonoBehaviour, IVoiceInputEngine
         var startInfo = new ProcessStartInfo
         {
             FileName = whisperCliPath,
-            Arguments = $"-f \"{audioPath}\" -np -nt",
+            Arguments = $"-m \"models/ggml-tiny.en.bin\" -f \"{audioPath}\" -np -nt",
             RedirectStandardOutput = true,
             RedirectStandardError = true,
             UseShellExecute = false,
