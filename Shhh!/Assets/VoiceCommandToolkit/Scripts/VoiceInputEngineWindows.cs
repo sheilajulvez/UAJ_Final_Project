@@ -5,8 +5,9 @@ using UnityEngine.Windows.Speech;
 using System.Collections;
 using UnityEngine.UI;
 using TMPro;
+using AudioDetection.Interfaces;
 
-public class VoiceInputEngine : MonoBehaviour
+public class VoiceInputEngineWindows : MonoBehaviour, IVoiceInputEngine
 {
     private DictationRecognizer dictationRecognizer;
     private string[] commandsBase;
@@ -60,18 +61,20 @@ public class VoiceInputEngine : MonoBehaviour
             {
                 matchedCommand = cmd;
                 Debug.Log($"[VoiceInputEngine] Comando base detectado: '{matchedCommand}'");
+                // Cambiar el color a rojo (por ejemplo)
                 if (hypothesisText != null)
-                {
-                    // Cambiar el color a rojo (por ejemplo)
-                    panelImage.sprite = valid;
                     hypothesisText.text =  text;
-                }
+                if (panelImage != null)
+                    panelImage.sprite = valid;
+
                 break;
             }
             else
             {
-                panelImage.sprite = invalid;
-                hypothesisText.text =text;
+                if (hypothesisText != null)
+                    hypothesisText.text = text;
+                if (panelImage != null)
+                    panelImage.sprite = invalid;
             }
         }
 
@@ -162,7 +165,31 @@ public class VoiceInputEngine : MonoBehaviour
     private void DictationRecognizer_DictationError(string error, int hresult)
     {
         Debug.LogError($"[VoiceInputEngine] Dictation error: {error}; HResult = {hresult}");
+
+        // Verificar el código de error específico que indica que el reconocimiento está desactivado
+        const int ERROR_DICTATION_DISABLED = unchecked((int)0x80045509); // HResult de ese error
+
+        if (hresult == ERROR_DICTATION_DISABLED)
+        {
+            Debug.LogError("El reconocimiento por voz no está activado en el sistema. Por favor ve a Configuración > Privacidad > Voz y activa el reconocimiento en línea.");
+            OpenVoiceSettings();
+        }
+
+        // Aquí puedes parar el recognizer o notificar al usuario desde la UI
     }
+
+    private void OpenVoiceSettings()
+    {
+        try
+        {
+            System.Diagnostics.Process.Start("ms-settings:privacy-speech");
+        }
+        catch (Exception e)
+        {
+            Debug.LogWarning("No se pudo abrir la configuración de privacidad de voz: " + e.Message);
+        }
+    }
+
 
     private void OnDestroy()
     {

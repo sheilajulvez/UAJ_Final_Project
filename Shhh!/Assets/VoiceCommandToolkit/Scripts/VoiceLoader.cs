@@ -5,11 +5,37 @@ using AudioDetection.Interfaces;
 
 public class VoiceLoader : MonoBehaviour
 {
+    public enum VoiceEngineType
+    {
+        Whisper,
+        Windows
+    }
+
+    [SerializeField]
+    private VoiceEngineType engineType = VoiceEngineType.Whisper;
+
+    private IVoiceInputEngine inputEngine;
+
     public TextAsset commandFile;
-    private VoiceInputEngine inputEngine;
 
     void Start()
     {
+        // Según la opción elegida, obtenemos o añadimos el componente correspondiente
+        switch (engineType)
+        {
+            case VoiceEngineType.Whisper:
+                inputEngine = GetComponent<VoiceInputEngineWhisper>();
+                if (inputEngine == null)
+                    inputEngine = gameObject.AddComponent<VoiceInputEngineWhisper>();
+                break;
+
+            case VoiceEngineType.Windows:
+                inputEngine = GetComponent<VoiceInputEngineWindows>();
+                if (inputEngine == null)
+                    inputEngine = gameObject.AddComponent<VoiceInputEngineWindows>();
+                break;
+        }
+
         var data = JsonUtility.FromJson<VoiceCommandDefinitionList>(commandFile.text);
 
         List<string> keywords = new();
@@ -28,7 +54,7 @@ public class VoiceLoader : MonoBehaviour
             }
         }
 
-        inputEngine = GetComponent<VoiceInputEngine>();
+        inputEngine = GetComponent<VoiceInputEngineWhisper>();
         inputEngine.Initialize(keywords.ToArray());
         // Adaptamos la llamada al evento para usar la versión con parámetros
         inputEngine.OnCommandRecognized += (command, parameters) =>
