@@ -165,7 +165,8 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                GameObject.Find("Microphone").SetActive(false);
+                GameObject.Find("CanvasTutorial").SetActive(false);
+                GameObject.Find("CanvasVoice").SetActive(false);
                 GameObject.Find("Control").SetActive(false);
             }
             image = GameObject.Find("spaceImage");
