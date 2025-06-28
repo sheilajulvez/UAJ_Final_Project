@@ -40,7 +40,7 @@ public class GameManager : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.B))
         {
-            GameObject.Find("Back").GetComponent<Button>().onClick.Invoke(); //retroceder boton menús
+            GameObject.Find("Back").GetComponent<Button>().onClick.Invoke(); //retroceder boton menï¿½s
         }
         else  if (Input.GetKeyDown(KeyCode.E))
         {
@@ -161,15 +161,12 @@ public class GameManager : MonoBehaviour
         {
             if (voiceRecogniser)
             {
-                GameObject.Find("Microphone").SetActive(true);
-                GameObject.Find("Control").SetActive(true);
                 GameObject.Find("ControlC").SetActive(false);
-
             }
             else
             {
+                GameObject.Find("Microphone").SetActive(false);
                 GameObject.Find("Control").SetActive(false);
-                GameObject.Find("ControlC").SetActive(true);
             }
             image = GameObject.Find("spaceImage");
             image.SetActive(false);
@@ -193,11 +190,11 @@ public class GameManager : MonoBehaviour
         //if (playerPos != null)
         //{
         //    Player.transform.position = playerPos.transform.position;
-        //    Debug.LogWarning(" se encontró el objeto 'PlayerPos' en la escena cargada.");
+        //    Debug.LogWarning(" se encontrï¿½ el objeto 'PlayerPos' en la escena cargada.");
         //}
         //else
         //{
-        //    Debug.LogWarning("No se encontró el objeto 'PlayerPos' en la escena cargada.");
+        //    Debug.LogWarning("No se encontrï¿½ el objeto 'PlayerPos' en la escena cargada.");
         //}
     }
 }

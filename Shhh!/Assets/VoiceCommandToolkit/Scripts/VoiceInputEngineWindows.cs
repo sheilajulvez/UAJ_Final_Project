@@ -120,7 +120,7 @@ public class VoiceInputEngineWindows : BaseVoiceInputEngine
     private void DictationRecognizer_DictationComplete(DictationCompletionCause cause)
     {
         Debug.Log($"[VoiceInputEngine] Dictation complete: {cause}");
-        if (cause != DictationCompletionCause.Complete && !isRestarting)
+        if (!isRestarting)
         {
             Debug.LogWarning("[VoiceInputEngine] Dictation finaliz� inesperadamente. Reiniciando...");
 
