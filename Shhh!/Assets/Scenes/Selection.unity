@@ -2016,6 +2016,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -639540857808011710, guid: d0ce84f02169f804f9cebc84d98554e6, type: 3}
+      propertyPath: panelImage
+      value: 
+      objectReference: {fileID: 405180916}
+    - target: {fileID: -639540857808011710, guid: d0ce84f02169f804f9cebc84d98554e6, type: 3}
+      propertyPath: hypothesisText
+      value: 
+      objectReference: {fileID: 1197422897}
     - target: {fileID: 933539188256845876, guid: d0ce84f02169f804f9cebc84d98554e6, type: 3}
       propertyPath: m_Name
       value: VoiceManager
@@ -2067,6 +2075,10 @@ PrefabInstance:
     - target: {fileID: 6522112700059512313, guid: d0ce84f02169f804f9cebc84d98554e6, type: 3}
       propertyPath: m_Enabled
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6522112700059512313, guid: d0ce84f02169f804f9cebc84d98554e6, type: 3}
+      propertyPath: engineType
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6853134889239059529, guid: d0ce84f02169f804f9cebc84d98554e6, type: 3}
       propertyPath: panelImage

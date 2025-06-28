@@ -226,7 +226,7 @@ public class VoiceInputEngineWhisper : MonoBehaviour, IVoiceInputEngine
 
     private IEnumerator WaitBeforeNextRecognition()
     {
-        yield return new WaitForSeconds(waitNextCommandSeconds);  // Espera 1 segundo para mostrar el comando
+        yield return new WaitForSeconds(waitNextCommandSeconds);  // Espera para mostrar el comando
     }
 
 }

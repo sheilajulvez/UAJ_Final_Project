@@ -54,7 +54,6 @@ public class VoiceLoader : MonoBehaviour
             }
         }
 
-        inputEngine = GetComponent<VoiceInputEngineWhisper>();
         inputEngine.Initialize(keywords.ToArray());
         // Adaptamos la llamada al evento para usar la versión con parámetros
         inputEngine.OnCommandRecognized += (command, parameters) =>
