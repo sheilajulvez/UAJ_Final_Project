@@ -4,6 +4,7 @@ using System.Collections;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
@@ -85,7 +86,7 @@ public class VoiceInputEngineWhisper : BaseVoiceInputEngine
 
         UnityEngine.Debug.Log("Archivo guardado en: " + audioFilePath);
 
-        var whisperTask = RunWhisperCliAsync(audioFilePath);
+        var whisperTask = RunWhisperDllAsync(audioFilePath);
         while (!whisperTask.IsCompleted)
             yield return null;
 
@@ -98,55 +99,36 @@ public class VoiceInputEngineWhisper : BaseVoiceInputEngine
         yield return new WaitForSeconds(waitNextCommandSeconds);
     }
 
-    private async Task<string> RunWhisperCliAsync(string audioPath)
+    private Task<string> RunWhisperDllAsync(string audioPath)
     {
-        if (!File.Exists(whisperCliPath))
+        return Task.Run(() =>
         {
-            UnityEngine.Debug.LogError("No se encontr� whisper-cli en: " + whisperCliPath);
-            return "";
-        }
-        if (!File.Exists(audioPath))
-        {
-            UnityEngine.Debug.LogError("No se encontr� el audio en: " + audioPath);
-            return "";
-        }
+            string modelPath = Path.Combine(whisperFolder, "models", "ggml-tiny.en.bin");
 
-        var startInfo = new ProcessStartInfo
-        {
-            FileName = whisperCliPath,
-            Arguments = $"-m \"models/ggml-tiny.en.bin\" -f \"{audioPath}\" -np -nt",
-            RedirectStandardOutput = true,
-            RedirectStandardError = true,
-            UseShellExecute = false,
-            CreateNoWindow = true,
-            WorkingDirectory = whisperFolder
-        };
-
-        try
-        {
-            using (var process = new Process { StartInfo = startInfo })
+            if (!File.Exists(modelPath))
             {
-                process.Start();
-
-                string output = await process.StandardOutput.ReadToEndAsync();
-                string error = await process.StandardError.ReadToEndAsync();
-
-                process.WaitForExit();
-
-                if (!string.IsNullOrEmpty(error))
-                {
-                    UnityEngine.Debug.LogWarning("whisper-cli stderr: " + error);
-                }
-
-                return output.Trim();
+                UnityEngine.Debug.LogError("No se encontr� el modelo en: " + modelPath);
+                return "";
             }
-        }
-        catch (Exception e)
-        {
-            UnityEngine.Debug.LogError("Error al ejecutar whisper-cli: " + e.Message);
-            return "";
-        }
+
+            if (!File.Exists(audioPath))
+            {
+                UnityEngine.Debug.LogError("No se encontr� el archivo de audio en: " + audioPath);
+                return "";
+            }
+
+            try
+            {
+                return WhisperInterop.Transcribe(modelPath, audioPath);
+            }
+            catch (Exception e)
+            {
+                UnityEngine.Debug.LogError("Error al llamar a la DLL: " + e.Message);
+                return "";
+            }
+        });
     }
+
 
     private void ProcessTranscription(string transcription)
     {
