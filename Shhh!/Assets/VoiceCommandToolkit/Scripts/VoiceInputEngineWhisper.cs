@@ -13,11 +13,12 @@ using UnityEngine.UI;
 public class VoiceInputEngineWhisper : BaseVoiceInputEngine
 {
     private string whisperFolder => Path.Combine(Application.streamingAssetsPath, "Whisper");
-    private string whisperCliPath => Path.Combine(whisperFolder, "whisper-cli.exe");
     private string audioFilePath;
 
     public override event Action<string, object[]> OnCommandRecognized;
 
+    [SerializeField]
+    private string modelo = "ggml-tiny.en.bin";
     [SerializeField]
     private float durationSeconds = 5.0f;
     [SerializeField]
@@ -103,7 +104,7 @@ public class VoiceInputEngineWhisper : BaseVoiceInputEngine
     {
         return Task.Run(() =>
         {
-            string modelPath = Path.Combine(whisperFolder, "models", "ggml-tiny.en.bin");
+            string modelPath = Path.Combine(whisperFolder, "models", modelo);
 
             if (!File.Exists(modelPath))
             {
