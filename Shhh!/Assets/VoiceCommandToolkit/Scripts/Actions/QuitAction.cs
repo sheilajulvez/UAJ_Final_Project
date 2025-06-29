@@ -6,13 +6,8 @@ using UnityEngine.UI; // Necesario para SceneManager
 using AudioDetection.Interfaces;
 public class QuitAction : IVoiceAction {
     public void Execute(params object[] parameters) {
-        if (SceneManager.GetActiveScene().name == "Menu")
-        {
-            GameObject.Find("QuitButton").GetComponent<Button>().onClick.Invoke();
-        }
-        else
-        {
-            GameManager.Instance.QuitGame();
-        }
+        
+        GameManager.Instance.QuitGame();
+        
     }
 }

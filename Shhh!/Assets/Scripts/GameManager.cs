@@ -10,7 +10,6 @@ public class GameManager : MonoBehaviour
 
     private bool voiceRecogniser = true;
     private GameObject Player;
-    [SerializeField] GameObject image;
     public string[] sceneNames;
     private int coinsCollected = 0;
 
@@ -34,17 +33,9 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.H))
+        if (Input.GetKeyDown(KeyCode.E))
         {
-            GameObject.Find("Control").GetComponent<Button>().onClick.Invoke();//menu de ayuda con los comandos de voz
-        }
-        else if (Input.GetKeyDown(KeyCode.B))
-        {
-            GameObject.Find("Back").GetComponent<Button>().onClick.Invoke(); //retroceder boton men�s
-        }
-        else  if (Input.GetKeyDown(KeyCode.E))
-        {
-            VoiceRecognition.Instance.CheckArea();
+            CheckArea();
         }
         // Al pulsar Shift Izquierdo
         if (Input.GetKeyDown(KeyCode.LeftShift))
@@ -61,6 +52,87 @@ public class GameManager : MonoBehaviour
         }
         
     }
+
+    public void CheckArea()
+    {
+        string n = SceneManager.GetActiveScene().name;
+        if (n == "Retiro" || n == "Cine" || n == "Iglesia" || n == "Mina")
+        {
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+            GameObject starCoin = GameObject.Find("StarCoin");
+
+            
+
+            if (player != null && starCoin != null)
+            {
+                AudioSource[] sources = player.GetComponents<AudioSource>();
+
+                
+
+                Collider triggerCollider = starCoin.GetComponent<Collider>();
+
+                if (triggerCollider != null && triggerCollider.isTrigger)
+                {
+                    if (triggerCollider.bounds.Contains(player.transform.position))
+                    {
+                        foreach (AudioSource source in sources)
+                        {
+                            if (source.clip != null && source.clip.name == "coin")
+                            {
+                                source.Play();
+                                break;
+                            }
+                        }
+
+                        SetCoinsCollected(GetCoinsCollected() + 1);
+                        if (GetCoinsCollected() < 4)
+                        {
+                            switch (n)
+                            {
+                                case "Retiro":
+                                    LoadScene("Iglesia");
+                                    break;
+                                case "Iglesia":
+                                    LoadScene("Cine");
+                                    break;
+                                case "Mina":
+                                    LoadScene("Retiro");
+                                    break;
+                                case "Cine":
+                                    LoadScene("Mina");
+                                    break;
+                                default:
+                                    Debug.LogWarning("Escena no contemplada para la transici�n.");
+                                    break;
+                            }
+                            Debug.Log("nextscene"); // Aqu� se puede cambiar por el nombre real si se quiere
+                        }
+                    }
+                    else
+                    {
+                        foreach (AudioSource source in sources)
+                        {
+                            if (source.clip != null && source.clip.name == "empty")
+                            {
+                                source.Play();
+                                break;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    Debug.LogWarning("El collider de StarCoin no est� marcado como Trigger.");
+                }
+            }
+            else
+            {
+                Debug.LogError("No se encontr� el jugador o el objeto StarCoin.");
+            }
+        }
+    }
+
+
 
 
     public void SetCoinsCollected(int newValue)
@@ -82,6 +154,7 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("Recogniser desactivado");
         voiceRecogniser = false;
+        GameObject.Find("VoiceManager").SetActive(false);
         LoadScene("Menu");
     }
 
@@ -105,19 +178,6 @@ public class GameManager : MonoBehaviour
 
     public void AvanzaPersonaje()
     {
-        //switch (currentScene)
-        //{
-        //    case "Iglesia":
-        //        IglesiaPath.Instance.AvanzaRuta();
-        //        IglesiaTexts.Instance.StartTyping();
-        //        break;
-        //    case "Mina":
-        //        MinePath.Instance.AvanzaRuta();
-        //        MineTexts.Instance.StartTyping();
-        //        break;
-
-        //}
-
         Player.GetComponent<MoveAgent>().IniciarMovimiento();
     }
 
@@ -151,8 +211,11 @@ public class GameManager : MonoBehaviour
     }
     public void QuitGame()
     {
-        Debug.Log("Cerrando el juego...");
-        Application.Quit();
+        #if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+        #else
+            Application.Quit();
+        #endif
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -169,33 +232,14 @@ public class GameManager : MonoBehaviour
                 GameObject.Find("CanvasVoice").SetActive(false);
                 GameObject.Find("Control").SetActive(false);
             }
-            image = GameObject.Find("spaceImage");
-            image.SetActive(false);
             GameObject.Find("QuitButton").GetComponent<Button>().onClick.AddListener(() => QuitGame());
             GameObject.Find("PlayButton").GetComponent<Button>().onClick.AddListener(() => LoadScene("Iglesia"));
         }
         else if (scene.name == "Victory")
         {
-            if (image != null) image.SetActive(false);
-            GameObject.Find("Control").SetActive(false);
+            Cursor.lockState = CursorLockMode.None; // Libera el cursor
+            Cursor.visible = true;                  // Muestra el cursor
+            GameObject.Find("QuitButton").GetComponent<Button>().onClick.AddListener(() => QuitGame());
         }
-        else
-        {
-            //GameObject.Find("ControlC").SetActive(false);
-
-            //if (image != null) image.SetActive(true);
-        }
-        //if (Player == null) Player= GameObject.Find("player1");
-
-        //GameObject playerPos = GameObject.Find("playerpos");
-        //if (playerPos != null)
-        //{
-        //    Player.transform.position = playerPos.transform.position;
-        //    Debug.LogWarning(" se encontr� el objeto 'PlayerPos' en la escena cargada.");
-        //}
-        //else
-        //{
-        //    Debug.LogWarning("No se encontr� el objeto 'PlayerPos' en la escena cargada.");
-        //}
     }
 }

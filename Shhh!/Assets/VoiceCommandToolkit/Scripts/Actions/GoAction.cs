@@ -26,6 +26,26 @@ public class GoAction : IVoiceAction
             return;
         }
 
+        switch (targetScene)
+        {
+            case "cinema":
+                targetScene = "Cine";
+                break;
+            case "park":
+                targetScene = "Retiro";
+                break;
+            case "church":
+                targetScene = "Iglesia";
+                break;
+            case "mine":
+                targetScene = "Mina";
+                break;
+            default:
+                Debug.LogWarning($"Unknown scene: {targetScene}");
+                break;
+        }
+
+
         string currentScene = SceneManager.GetActiveScene().name;
 
         // Comprobar lista blanca de escenas desde donde se puede cambiar

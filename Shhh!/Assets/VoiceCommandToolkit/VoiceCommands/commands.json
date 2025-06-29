@@ -13,7 +13,9 @@
         {
             "Command": "go",
             "ActionClassName": "GoAction",
-            "Parameters": [ "sceneName" ]
+            "Parameters": [
+                "sceneName"
+            ]
         },
         {
             "Command": "quit",
@@ -22,7 +24,7 @@
         },
         {
             "Command": "microphone",
-            "ActionClassName": "MicrohponeAction",
+            "ActionClassName": "MicrophoneAction",
             "Parameters": []
         },
         {
@@ -33,11 +35,6 @@
         {
             "Command": "back",
             "ActionClassName": "BackAction",
-            "Parameters": []
-        },
-        {
-            "Command": "classic",
-            "ActionClassName": "ClassicAction",
             "Parameters": []
         },
         {
@@ -53,16 +50,18 @@
         {
             "Command": "Look",
             "ActionClassName": "LookAction",
-            "Parameters": ["Direction"]
+            "Parameters": [
+                "Direction"
+            ]
         },
         {
             "Command": "pick",
-            "ActionClassName": "CheckAreaAction",
+            "ActionClassName": "PickAction",
             "Parameters": []
         },
         {
             "Command": "coin",
-            "ActionClassName": "CheckAreaAction",
+            "ActionClassName": "CoinAction",
             "Parameters": []
         }
     ]

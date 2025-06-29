@@ -9,7 +9,7 @@ public class MicrophoneAction : IVoiceAction
     {
         if (SceneManager.GetActiveScene().name == "Menu")
         {
-            GameObject micro = GameObject.Find("Microphone");
+            GameObject micro = GameObject.Find("Tutorial");
             if (micro != null)
             {
                 Button btn = micro.GetComponent<Button>();
@@ -24,12 +24,12 @@ public class MicrophoneAction : IVoiceAction
             }
             else
             {
-                Debug.LogWarning("No se encontró el objeto 'Microphone'.");
+                Debug.LogWarning("No se encontrï¿½ el objeto 'Microphone'.");
             }
         }
         else
         {
-            Debug.LogWarning("El comando 'microphone' solo está disponible desde la escena 'Menu'.");
+            Debug.LogWarning("El comando 'microphone' solo estï¿½ disponible desde la escena 'Menu'.");
         }
     }
 }

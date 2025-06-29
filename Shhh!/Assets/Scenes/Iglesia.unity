@@ -1157,6 +1157,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5567630192063275890, guid: c39ab82746ede5a4ca4e2fe5c11d24e7, type: 3}
+      propertyPath: enableSprint
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5567630192063275890, guid: c39ab82746ede5a4ca4e2fe5c11d24e7, type: 3}
       propertyPath: cameraCanMove
       value: 1
       objectReference: {fileID: 0}
