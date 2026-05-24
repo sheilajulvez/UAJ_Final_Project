@@ -8,6 +8,7 @@ public class VoiceCommandEditorWindow : EditorWindow
 {
     private List<VoiceCommandDefinition> commands = new();
     private Dictionary<string, string> newParams = new(); // nuevo parámetro auxiliar por comando
+    private Dictionary<string, string> newContexts = new();
     private string newCommand = "";
     private Vector2 scroll;
 
@@ -26,16 +27,24 @@ public class VoiceCommandEditorWindow : EditorWindow
         if (GUILayout.Button("Añadir Comando"))
         {
             string trimmedLower = newCommand.Trim().ToLower();
+
             if (!string.IsNullOrWhiteSpace(newCommand) && !commands.Exists(c => c.Command == trimmedLower))
             {
                 commands.Add(new VoiceCommandDefinition
                 {
                     Command = trimmedLower,
                     ActionClassName = ToClassName(trimmedLower),
-                    Parameters = new List<string>()
+                    Parameters = new List<string>(),
+                    Contexts = new List<string>()
                 });
+
                 newParams[trimmedLower] = "";
+                newContexts[trimmedLower] = "";
+
                 newCommand = "";
+
+                GUI.FocusControl(null);
+                Repaint();
             }
         }
 
@@ -47,19 +56,58 @@ public class VoiceCommandEditorWindow : EditorWindow
         for (int i = 0; i < commands.Count; i++)
         {
             var cmd = commands[i];
-            EditorGUILayout.BeginVertical("box");
-            EditorGUILayout.LabelField($"Comando: {cmd.Command} → {ToClassName(cmd.Command)}", EditorStyles.boldLabel);
 
-            // Para eliminar sin alterar índice, iteramos al revés
-            for (int j = cmd.Parameters.Count - 1; j >= 0; j--)
+            if (cmd.Parameters == null)
+                cmd.Parameters = new List<string>();
+
+            if (cmd.Contexts == null)
+                cmd.Contexts = new List<string>();
+
+            EditorGUILayout.BeginVertical("box");
+
+            EditorGUILayout.LabelField(
+                $"Comando: {cmd.Command} → {ToClassName(cmd.Command)}",
+                EditorStyles.boldLabel
+            );
+
+            
+            // PARÁMETROS
+            
+            GUILayout.Space(5);
+            EditorGUILayout.LabelField("Parámetros", EditorStyles.boldLabel);
+
+            int parameterToRemove = -1;
+
+            for (int j = 0; j < cmd.Parameters.Count; j++)
             {
                 EditorGUILayout.BeginHorizontal();
-                cmd.Parameters[j] = EditorGUILayout.TextField($"Parámetro {j + 1}:", cmd.Parameters[j]);
+
+                EditorGUI.BeginChangeCheck();
+
+                string editedParameter = EditorGUILayout.TextField(
+                    $"Parámetro {j + 1}:",
+                    cmd.Parameters[j]
+                );
+
+                if (EditorGUI.EndChangeCheck())
+                {
+                    cmd.Parameters[j] = editedParameter.Trim();
+                }
+
                 if (GUILayout.Button("X", GUILayout.Width(20)))
                 {
-                    cmd.Parameters.RemoveAt(j);
+                    parameterToRemove = j;
                 }
+
                 EditorGUILayout.EndHorizontal();
+            }
+
+            if (parameterToRemove >= 0)
+            {
+                cmd.Parameters.RemoveAt(parameterToRemove);
+
+                GUI.FocusControl(null);
+                Repaint();
             }
 
             EditorGUILayout.BeginHorizontal();
@@ -67,21 +115,101 @@ public class VoiceCommandEditorWindow : EditorWindow
             if (!newParams.ContainsKey(cmd.Command))
                 newParams[cmd.Command] = "";
 
-            newParams[cmd.Command] = EditorGUILayout.TextField("Nuevo parámetro:", newParams[cmd.Command]);
+            newParams[cmd.Command] = EditorGUILayout.TextField(
+                "Nuevo parámetro:",
+                newParams[cmd.Command]
+            );
 
             if (GUILayout.Button("+", GUILayout.Width(30)))
             {
-                string np = newParams[cmd.Command]?.Trim();
-                if (!string.IsNullOrWhiteSpace(np))
+                string newParameter = newParams[cmd.Command]?.Trim();
+
+                if (!string.IsNullOrWhiteSpace(newParameter) &&
+                    !cmd.Parameters.Contains(newParameter))
                 {
-                    cmd.Parameters.Add(np);
+                    cmd.Parameters.Add(newParameter);
                     newParams[cmd.Command] = "";
+
+                    GUI.FocusControl(null);
+                    Repaint();
                 }
             }
+
             EditorGUILayout.EndHorizontal();
 
+            
+            // CONTEXTOS
+            
+            GUILayout.Space(8);
+            EditorGUILayout.LabelField("Contextos válidos", EditorStyles.boldLabel);
+
+            int contextToRemove = -1;
+
+            for (int j = 0; j < cmd.Contexts.Count; j++)
+            {
+                EditorGUILayout.BeginHorizontal();
+
+                EditorGUI.BeginChangeCheck();
+
+                string editedContext = EditorGUILayout.TextField(
+                    $"Contexto {j + 1}:",
+                    cmd.Contexts[j]
+                );
+
+                if (EditorGUI.EndChangeCheck())
+                {
+                    cmd.Contexts[j] = editedContext.Trim().ToUpper();
+                }
+
+                if (GUILayout.Button("X", GUILayout.Width(20)))
+                {
+                    contextToRemove = j;
+                }
+
+                EditorGUILayout.EndHorizontal();
+            }
+
+            if (contextToRemove >= 0)
+            {
+                cmd.Contexts.RemoveAt(contextToRemove);
+
+                GUI.FocusControl(null);
+                Repaint();
+            }
+
+            EditorGUILayout.BeginHorizontal();
+
+            if (!newContexts.ContainsKey(cmd.Command))
+                newContexts[cmd.Command] = "";
+
+            newContexts[cmd.Command] = EditorGUILayout.TextField(
+                "Nuevo contexto:",
+                newContexts[cmd.Command]
+            );
+
+            if (GUILayout.Button("+", GUILayout.Width(30)))
+            {
+                string newContext = newContexts[cmd.Command]?.Trim().ToUpper();
+
+                if (!string.IsNullOrWhiteSpace(newContext) &&
+                    !cmd.Contexts.Contains(newContext))
+                {
+                    cmd.Contexts.Add(newContext);
+                    newContexts[cmd.Command] = "";
+
+                    GUI.FocusControl(null);
+                    Repaint();
+                }
+            }
+
+            EditorGUILayout.EndHorizontal();
+
+            GUILayout.Space(5);
+
             if (GUILayout.Button("Eliminar comando"))
+            {
                 commandToRemove = i;
+            }
 
             EditorGUILayout.EndVertical();
         }
@@ -89,19 +217,33 @@ public class VoiceCommandEditorWindow : EditorWindow
         if (commandToRemove >= 0)
         {
             var cmdToRemove = commands[commandToRemove];
+
             commands.RemoveAt(commandToRemove);
+
             if (newParams.ContainsKey(cmdToRemove.Command))
                 newParams.Remove(cmdToRemove.Command);
+
+            if (newContexts.ContainsKey(cmdToRemove.Command))
+                newContexts.Remove(cmdToRemove.Command);
+
+            GUI.FocusControl(null);
+            Repaint();
         }
 
         EditorGUILayout.EndScrollView();
 
         GUILayout.Space(10);
+
         if (GUILayout.Button("Guardar y generar scripts"))
         {
             GenerateJSON();
             GenerateActionScripts();
+
             AssetDatabase.Refresh();
+
+            GUI.FocusControl(null);
+            Repaint();
+
             Debug.Log("Comandos generados correctamente.");
         }
     }
@@ -125,7 +267,8 @@ public class VoiceCommandEditorWindow : EditorWindow
             {
                 Command = cmd.Command,
                 ActionClassName = ToClassName(cmd.Command),
-                Parameters = new List<string>(cmd.Parameters)
+                Parameters = new List<string>(cmd.Parameters),
+                Contexts = new List<string>(cmd.Contexts)
             });
         }
 
@@ -225,9 +368,11 @@ public class {className} : IVoiceAction {{
                 {
                     Command = def.Command,
                     ActionClassName = def.ActionClassName,
-                    Parameters = def.Parameters ?? new List<string>()
+                    Parameters = def.Parameters ?? new List<string>(),
+                    Contexts = def.Contexts ?? new List<string>()
                 });
                 newParams[def.Command] = "";
+                newContexts[def.Command] = "";
             }
         }
     }
