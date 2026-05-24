@@ -10,7 +10,6 @@ public class VoiceCommandDefinition
     public string Command;
     public string ActionClassName;
     public List<string> Parameters;
-    public List<string> Contexts;
 }
 
 [Serializable]

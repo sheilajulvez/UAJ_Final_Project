@@ -220,8 +220,6 @@ public class GameManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-
-        UpdateVoiceContextByScene(scene.name);
         if (scene.name == "Menu")
         {
             if (voiceRecogniser)
@@ -242,42 +240,6 @@ public class GameManager : MonoBehaviour
             Cursor.lockState = CursorLockMode.None; // Libera el cursor
             Cursor.visible = true;                  // Muestra el cursor
             GameObject.Find("QuitButton").GetComponent<Button>().onClick.AddListener(() => QuitGame());
-        }
-    }
-
-    private void UpdateVoiceContextByScene(string sceneName)
-    {
-        if (VoiceCommandManager.Instance == null)
-        {
-            Debug.LogWarning("[GameManager] No existe VoiceCommandManager.Instance. No se pudo actualizar el contexto de voz.");
-            return;
-        }
-
-        switch (sceneName)
-        {
-            case "Selection":
-                VoiceCommandManager.Instance.SetContext("SELECTION");
-                break;
-
-            case "Menu":
-                VoiceCommandManager.Instance.SetContext("MENU");
-                break;
-
-            case "Retiro":
-            case "Cine":
-            case "Iglesia":
-            case "Mina":
-                VoiceCommandManager.Instance.SetContext("IN_GAME");
-                break;
-
-            case "Victory":
-                VoiceCommandManager.Instance.SetContext("VICTORY");
-                break;
-
-            default:
-                VoiceCommandManager.Instance.SetContext("GLOBAL");
-                Debug.LogWarning($"[GameManager] Escena '{sceneName}' sin contexto específico. Se usará GLOBAL.");
-                break;
         }
     }
 }

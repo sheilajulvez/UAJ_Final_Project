@@ -3,105 +3,66 @@
         {
             "Command": "voice",
             "ActionClassName": "VoiceAction",
-            "Parameters": [],
-            "Contexts": [
-                "SELECTION"
-            ]
+            "Parameters": []
         },
         {
             "Command": "play",
             "ActionClassName": "PlayAction",
-            "Parameters": [],
-            "Contexts": [
-                "MENU"
-            ]
+            "Parameters": []
         },
         {
             "Command": "go",
             "ActionClassName": "GoAction",
             "Parameters": [
                 "sceneName"
-            ],
-            "Contexts": [
-                "IN_GAME"
             ]
         },
         {
             "Command": "quit",
             "ActionClassName": "QuitAction",
-            "Parameters": [],
-            "Contexts": [
-                "MENU",
-                "IN_GAME",
-                "HELP_SCREEN",
-                "MICROPHONE_CONFIG"
-            ]
+            "Parameters": []
         },
         {
             "Command": "microphone",
             "ActionClassName": "MicrophoneAction",
-            "Parameters": [],
-            "Contexts": [
-                "MENU"
-            ]
+            "Parameters": []
         },
         {
             "Command": "exit",
             "ActionClassName": "ExitAction",
-            "Parameters": [],
-            "Contexts": [
-                "HELP_SCREEN"
-            ]
+            "Parameters": []
         },
         {
             "Command": "back",
             "ActionClassName": "BackAction",
-            "Parameters": [],
-            "Contexts": [
-                "HELP_SCREEN"
-            ]
+            "Parameters": []
         },
         {
             "Command": "help",
             "ActionClassName": "HelpAction",
-            "Parameters": [],
-            "Contexts": [
-                "MENU"
-            ]
+            "Parameters": []
         },
         {
             "Command": "move",
             "ActionClassName": "MoveAction",
-            "Parameters": [],
-            "Contexts": [
-                "IN_GAME"
-            ]
+            "Parameters": []
         },
         {
             "Command": "Look",
             "ActionClassName": "LookAction",
             "Parameters": [
                 "Direction"
-            ],
-            "Contexts": [
-                "IN_GAME"
             ]
         },
         {
             "Command": "pick",
             "ActionClassName": "PickAction",
-            "Parameters": [],
-            "Contexts": [
-                "IN_GAME"
-            ]
+            "Parameters": []
         },
         {
             "Command": "coin",
             "ActionClassName": "CoinAction",
-            "Parameters": [],
-            "Contexts": [
-                "IN_GAME"
-            ]
+            "Parameters": []
         }
     ]
 }
