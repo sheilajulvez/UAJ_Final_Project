@@ -1,8 +1,5 @@
-
 using System;
 using System.Collections.Generic;
-
-
 
 [Serializable]
 public class VoiceCommandDefinition
@@ -10,7 +7,11 @@ public class VoiceCommandDefinition
     public string Command;
     public string ActionClassName;
     public List<string> Parameters;
-    public List<string> Contexts;
+
+    /// <summary>
+    /// Frases equivalentes que el usuario puede pronunciar en lugar del comando principal.
+    /// </summary>
+    public List<string> Aliases;
 }
 
 [Serializable]

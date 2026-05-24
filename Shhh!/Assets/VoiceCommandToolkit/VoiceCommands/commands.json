@@ -4,16 +4,21 @@
             "Command": "voice",
             "ActionClassName": "VoiceAction",
             "Parameters": [],
-            "Contexts": [
-                "SELECTION"
+            "Aliases": [
+                "voz",
+                "activar voz",
+                "desactivar voz"
             ]
         },
         {
             "Command": "play",
             "ActionClassName": "PlayAction",
             "Parameters": [],
-            "Contexts": [
-                "MENU"
+            "Aliases": [
+                "start",
+                "jugar",
+                "comenzar",
+                "empezar"
             ]
         },
         {
@@ -22,85 +27,108 @@
             "Parameters": [
                 "sceneName"
             ],
-            "Contexts": [
-                "IN_GAME"
+            "Aliases": [
+                "travel",
+                "navigate",
+                "ir"
             ]
         },
         {
             "Command": "quit",
             "ActionClassName": "QuitAction",
             "Parameters": [],
-            "Contexts": [
-                "MENU",
-                "IN_GAME",
-                "HELP_SCREEN",
-                "MICROPHONE_CONFIG"
+            "Aliases": [
+                "leave",
+                "salir",
+                "cerrar"
             ]
         },
         {
             "Command": "microphone",
             "ActionClassName": "MicrophoneAction",
             "Parameters": [],
-            "Contexts": [
-                "MENU"
+            "Aliases": [
+                "mic",
+                "microfono",
+                "configurar microfono"
             ]
         },
         {
             "Command": "exit",
             "ActionClassName": "ExitAction",
             "Parameters": [],
-            "Contexts": [
-                "HELP_SCREEN"
+            "Aliases": [
+                "volver",
+                "regresar",
+                "menu"
             ]
         },
         {
             "Command": "back",
             "ActionClassName": "BackAction",
             "Parameters": [],
-            "Contexts": [
-                "HELP_SCREEN"
+            "Aliases": [
+                "atras",
+                "anterior"
             ]
         },
         {
             "Command": "help",
             "ActionClassName": "HelpAction",
             "Parameters": [],
-            "Contexts": [
-                "MENU"
+            "Aliases": [
+                "commands",
+                "ayuda",
+                "comandos",
+                "socorro"
             ]
         },
         {
             "Command": "move",
             "ActionClassName": "MoveAction",
             "Parameters": [],
-            "Contexts": [
-                "IN_GAME"
+            "Aliases": [
+                "walk",
+                "forward",
+                "advance",
+                "adelante",
+                "avanzar"
             ]
         },
         {
-            "Command": "Look",
+            "Command": "look",
             "ActionClassName": "LookAction",
             "Parameters": [
                 "Direction"
             ],
-            "Contexts": [
-                "IN_GAME"
+            "Aliases": [
+                "turn",
+                "rotate",
+                "mirar",
+                "girar"
             ]
         },
         {
             "Command": "pick",
             "ActionClassName": "PickAction",
             "Parameters": [],
-            "Contexts": [
-                "IN_GAME"
+            "Aliases": [
+                "grab",
+                "take",
+                "coger",
+                "recoger",
+                "agarrar"
             ]
         },
         {
             "Command": "coin",
             "ActionClassName": "CoinAction",
             "Parameters": [],
-            "Contexts": [
-                "IN_GAME"
+            "Aliases": [
+                "moneda",
+                "estrella",
+                "star",
+                "collect"
             ]
         }
     ]

@@ -7,7 +7,7 @@ public class DetectColision : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -21,6 +21,6 @@ public class DetectColision : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 }

@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using AudioDetection.Interfaces;
@@ -18,12 +18,12 @@ public class LookAction : IVoiceAction
 
         if (parameters == null || parameters.Length == 0)
         {
-            Debug.LogWarning("[LookAction] No se recibió ninguna dirección (up/down/left/right).");
+            Debug.LogWarning("[LookAction] No se recibiÃ³ ninguna direcciÃ³n (up/down/left/right).");
             return;
         }
 
-        string direction = parameters[0].ToString().ToLower();
-        Debug.Log($"[LookAction] Dirección recibida: {direction}");
+        string direction = NormalizeDirection(parameters[0].ToString());
+        Debug.Log($"[LookAction] DirecciÃ³n recibida: {direction}");
 
         switch (direction)
         {
@@ -40,8 +40,32 @@ public class LookAction : IVoiceAction
                 GameManager.Instance.RotaDerechaPersonaje();
                 break;
             default:
-                Debug.LogWarning($"[LookAction] Dirección desconocida: {direction}");
+                Debug.LogWarning($"[LookAction] DirecciÃ³n desconocida: {direction}");
                 break;
         }
     }
+
+    private static string NormalizeDirection(string rawDirection)
+    {
+        string direction = rawDirection.Trim().ToLower();
+
+        switch (direction)
+        {
+            case "derecha":
+            case "derecho":
+                return "right";
+            case "izquierda":
+            case "izquierdo":
+                return "left";
+            case "arriba":
+            case "sube":
+                return "up";
+            case "abajo":
+            case "baja":
+                return "down";
+            default:
+                return direction;
+        }
+    }
 }
+

@@ -103,15 +103,11 @@ public class VoiceInputEngineWindows : BaseVoiceInputEngine
 
     private void DictationRecognizer_DictationHypothesis(string text)
     {
-        Debug.Log($"[VoiceInputEngine] Hip�tesis dictation: '{text}'");
+        Debug.Log($"[VoiceInputEngine] Hipótesis dictation: '{text}'");
 
+        // Solo actualizar la UI — no ejecutar comandos con resultados parciales
         if (hypothesisText != null)
-        {
             hypothesisText.text = "Escuchando: " + text;
-        }
-        // Llamamos al mismo m�todo que procesa el resultado,
-        // pero con un nivel de confianza medio para distinguir
-        DictationRecognizer_DictationResult(text, ConfidenceLevel.Medium);
     }
 
 

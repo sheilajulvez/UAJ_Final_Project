@@ -7,40 +7,14 @@ public class VoiceCommandManager : MonoBehaviour
 {
     public static VoiceCommandManager Instance;
 
-    private class RegisteredVoiceCommand
-    {
-        public IVoiceAction Action;
-        public HashSet<string> Contexts;
+    // Diccionario principal: comando normalizado -> accion
+    private readonly Dictionary<string, IVoiceAction> commands = new();
 
-        public RegisteredVoiceCommand(IVoiceAction action, IEnumerable<string> contexts)
-        {
-            Action = action;
-            Contexts = new HashSet<string>();
+    // Diccionario de aliases: alias normalizado -> comando principal normalizado
+    private readonly Dictionary<string, string> aliasToCommand = new();
 
-            if (contexts != null)
-            {
-                foreach (string context in contexts)
-                {
-                    if (!string.IsNullOrWhiteSpace(context))
-                    {
-                        Contexts.Add(NormalizeContext(context));
-                    }
-                }
-            }
-
-            // Por si el commando no tiene contexto definido
-            if (Contexts.Count == 0)
-            {
-                Contexts.Add("GLOBAL");
-            }
-        }
-    }
-
-    private Dictionary<string, RegisteredVoiceCommand> commands = new();
-
-    [SerializeField] private bool useContextFiltering = true;
-
-    private string currentContext = "SELECTION";
+    // Se mantiene por compatibilidad con llamadas existentes del proyecto.
+    private string currentContext = "GLOBAL";
 
     private void Awake()
     {
@@ -55,27 +29,65 @@ public class VoiceCommandManager : MonoBehaviour
         }
     }
 
-    public void RegisterCommand(string phrase, IVoiceAction action, IEnumerable<string> contexts)
+    /// <summary>
+    /// Registra un comando principal y su accion asociada.
+    /// </summary>
+    public void RegisterCommand(string phrase, IVoiceAction action)
     {
         string key = NormalizeCommand(phrase);
+        if (string.IsNullOrWhiteSpace(key) || action == null)
+        {
+            return;
+        }
 
         if (!commands.ContainsKey(key))
         {
-            commands.Add(key, new RegisteredVoiceCommand(action, contexts));
-
-            Debug.Log($"[VoiceCommandManager] Registrado comando '{key}' con contextos: {string.Join(", ", commands[key].Contexts)}");
+            commands.Add(key, action);
+            Debug.Log($"[VoiceCommandManager] Registrado comando '{key}'");
         }
         else
         {
-            Debug.LogWarning($"El comando '{phrase}' ya está registrado.");
+            Debug.LogWarning($"El comando '{phrase}' ya esta registrado.");
         }
     }
 
+    /// <summary>
+    /// Registra un alias que apunta al comando principal indicado.
+    /// </summary>
+    public void RegisterAlias(string alias, string primaryCommand)
+    {
+        string aliasKey = NormalizeCommand(alias);
+        string primaryKey = NormalizeCommand(primaryCommand);
 
+        if (string.IsNullOrWhiteSpace(aliasKey) || string.IsNullOrWhiteSpace(primaryKey))
+        {
+            return;
+        }
+
+        if (aliasToCommand.ContainsKey(aliasKey))
+        {
+            Debug.LogWarning($"El alias '{alias}' ya esta registrado (apunta a '{aliasToCommand[aliasKey]}').");
+            return;
+        }
+
+        aliasToCommand.Add(aliasKey, primaryKey);
+        Debug.Log($"[VoiceCommandManager] Alias registrado: '{aliasKey}' -> '{primaryKey}'");
+    }
+
+    /// <summary>
+    /// Devuelve el comando principal asociado a una frase.
+    /// </summary>
+    public string ResolveCommand(string phrase)
+    {
+        string key = NormalizeCommand(phrase);
+        return aliasToCommand.TryGetValue(key, out string primaryCommand) ? primaryCommand : key;
+    }
+
+    // Compatibilidad con el flujo actual del juego.
     public void SetContext(string context)
     {
-        currentContext = NormalizeContext(context);
-        Debug.Log($"[VoiceCommandManager] Contexto actual cambiado a: {currentContext}");
+        currentContext = string.IsNullOrWhiteSpace(context) ? "GLOBAL" : context.Trim().ToUpper();
+        Debug.Log($"[VoiceCommandManager] Contexto actualizado a '{currentContext}'");
     }
 
     public string GetCurrentContext()
@@ -83,22 +95,20 @@ public class VoiceCommandManager : MonoBehaviour
         return currentContext;
     }
 
+    public void HandleCommand(string phrase)
+    {
+        HandleCommand(phrase, null);
+    }
 
     public void HandleCommand(string phrase, object[] parameters)
     {
-        string key = NormalizeCommand(phrase);
+        string key = ResolveCommand(phrase);
 
-        if (commands.TryGetValue(key, out var registeredCommand))
+        if (commands.TryGetValue(key, out var action))
         {
-            if (useContextFiltering && !IsCommandAllowedInCurrentContext(registeredCommand))
-            {
-                Debug.LogWarning($"[VoiceCommandManager] Comando '{phrase}' reconocido pero no válido en el contexto actual: {currentContext}");
-                return;
-            }
-
             try
             {
-                registeredCommand.Action.Execute(parameters);
+                action.Execute(parameters);
             }
             catch (Exception e)
             {
@@ -107,22 +117,12 @@ public class VoiceCommandManager : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning($"Comando no reconocido: {phrase}");
+            Debug.LogWarning($"Comando no reconocido: '{phrase}'");
         }
-    }
-
-    private bool IsCommandAllowedInCurrentContext(RegisteredVoiceCommand command)
-    {
-        return command.Contexts.Contains("GLOBAL") || command.Contexts.Contains(currentContext);
     }
 
     private static string NormalizeCommand(string command)
     {
-        return command.Trim().ToLower();
-    }
-
-    private static string NormalizeContext(string context)
-    {
-        return context.Trim().ToUpper();
+        return string.IsNullOrWhiteSpace(command) ? string.Empty : command.Trim().ToLower();
     }
 }
