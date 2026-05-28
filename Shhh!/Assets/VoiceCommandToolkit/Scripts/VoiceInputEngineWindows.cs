@@ -56,7 +56,7 @@ public class VoiceInputEngineWindows : BaseVoiceInputEngine
             {
                 matchedCommand = cmd;
                 Debug.Log($"[VoiceInputEngine] Comando base detectado: '{matchedCommand}'");
-                // Cambiar el color a rojo (por ejemplo)
+                
                 if (hypothesisText != null)
                     hypothesisText.text =  text;
                 if (panelImage != null)

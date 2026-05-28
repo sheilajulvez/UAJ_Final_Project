@@ -1236,10 +1236,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: VoiceManager
       objectReference: {fileID: 0}
-    - target: {fileID: 4884575732640881663, guid: d0ce84f02169f804f9cebc84d98554e6, type: 3}
-      propertyPath: useContextFiltering
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 5597812994303140099, guid: d0ce84f02169f804f9cebc84d98554e6, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
