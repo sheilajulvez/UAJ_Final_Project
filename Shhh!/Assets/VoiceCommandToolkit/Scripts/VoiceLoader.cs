@@ -45,8 +45,8 @@ public class VoiceLoader : MonoBehaviour
             if (type != null && typeof(IVoiceAction).IsAssignableFrom(type))
             {
                 var action = (IVoiceAction)Activator.CreateInstance(type);
-                VoiceCommandManager.Instance.RegisterCommand(def.Command, action);
-                keywords.Add(def.Command);
+                VoiceCommandManager.Instance.RegisterCommand(def.Command, action, def.Contexts);
+                keywords.Add(def.Command.ToLower());
             }
             else
             {
