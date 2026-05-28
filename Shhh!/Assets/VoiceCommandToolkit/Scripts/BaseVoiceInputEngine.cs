@@ -9,6 +9,7 @@ public abstract class BaseVoiceInputEngine : MonoBehaviour, IVoiceInputEngine
     protected Image panelImage;
     protected Sprite valid;
     protected Sprite invalid;
+    protected Sprite outOfContext;
 
     public abstract event System.Action<string, object[]> OnCommandRecognized;
     public abstract void Initialize(string[] commands);
@@ -21,5 +22,6 @@ public abstract class BaseVoiceInputEngine : MonoBehaviour, IVoiceInputEngine
         // Carga desde la carpeta Resources
         valid = Resources.Load<Sprite>("Sprites/valid");
         invalid = Resources.Load<Sprite>("Sprites/invalid");
+        outOfContext = Resources.Load<Sprite>("Sprites/outOfContext");
     }
 }

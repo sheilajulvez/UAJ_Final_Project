@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using AudioDetection.Interfaces;
+using TMPro;
+using UnityEngine.UI;
 
 public class VoiceCommandManager : MonoBehaviour
 {
@@ -42,12 +44,24 @@ public class VoiceCommandManager : MonoBehaviour
 
     private string currentContext = "SELECTION";
 
+    private string previousContext = "GLOBAL";
+
+    
+
+    private TextMeshProUGUI hypothesisText;
+    private TextMeshProUGUI contextText;
+    private Image panelImage;
+
+    private Sprite outOfContextSprite;
+
     private void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
+
+            outOfContextSprite = Resources.Load<Sprite>("Sprites/outOfContext");
         }
         else
         {
@@ -76,11 +90,24 @@ public class VoiceCommandManager : MonoBehaviour
     {
         currentContext = NormalizeContext(context);
         Debug.Log($"[VoiceCommandManager] Contexto actual cambiado a: {currentContext}");
+
+        UpdateContextText();
     }
 
     public string GetCurrentContext()
     {
         return currentContext;
+    }
+
+    public void PushContext(string context)
+    {
+        previousContext = currentContext;
+        SetContext(context);
+    }
+
+    public void PopContext()
+    {
+        SetContext(previousContext);
     }
 
 
@@ -93,6 +120,9 @@ public class VoiceCommandManager : MonoBehaviour
             if (useContextFiltering && !IsCommandAllowedInCurrentContext(registeredCommand))
             {
                 Debug.LogWarning($"[VoiceCommandManager] Comando '{phrase}' reconocido pero no válido en el contexto actual: {currentContext}");
+
+                ShowFeedback($"{phrase}",outOfContextSprite);
+
                 return;
             }
 
@@ -124,5 +154,38 @@ public class VoiceCommandManager : MonoBehaviour
     private static string NormalizeContext(string context)
     {
         return context.Trim().ToUpper();
+    }
+
+    private void RefreshFeedbackReferences()
+    {
+        if (hypothesisText == null)
+            hypothesisText = GameObject.Find("MessageText")?.GetComponent<TextMeshProUGUI>();
+
+        if (contextText == null)
+            contextText = GameObject.Find("ContextText")?.GetComponent<TextMeshProUGUI>();
+
+        if (panelImage == null)
+            panelImage = GameObject.Find("UnrecognizedCommandPanel")?.GetComponent<Image>();
+    }
+
+    private void ShowFeedback(string message, Sprite sprite)
+    {
+        RefreshFeedbackReferences();
+
+        if (hypothesisText != null)
+            hypothesisText.text = message;
+
+        if (panelImage != null && sprite != null)
+            panelImage.sprite = sprite;
+
+        UpdateContextText();
+    }
+
+    private void UpdateContextText()
+    {
+        RefreshFeedbackReferences();
+
+        if (contextText != null)
+            contextText.text = $"Context: {currentContext}";
     }
 }
