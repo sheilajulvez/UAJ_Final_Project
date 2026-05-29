@@ -6,22 +6,21 @@ using UnityEngine.UI; // Necesario para SceneManager
 using AudioDetection.Interfaces;
 public class ExitAction : IVoiceAction {
     public void Execute(params object[] parameters) {
-        if (SceneManager.GetActiveScene().name != "Selection" && SceneManager.GetActiveScene().name != "Victory")
+        
+        GameObject back = GameObject.Find("Back");
+        if (back != null)
         {
-            GameObject back = GameObject.Find("Back");
-            if (back != null)
+            back.GetComponent<Button>().onClick.Invoke();
+            //controlSave.SetActive(true);
+        }
+        else
+        {
+            GameObject hide = GameObject.Find("Hide");
+            if (hide != null)
             {
-                back.GetComponent<Button>().onClick.Invoke();
-                //controlSave.SetActive(true);
-            }
-            else
-            {
-                GameObject hide = GameObject.Find("Hide");
-                if (hide != null)
-                {
-                    hide.GetComponent<Button>().onClick.Invoke();
-                }
+                hide.GetComponent<Button>().onClick.Invoke();
             }
         }
+        
     }
 }

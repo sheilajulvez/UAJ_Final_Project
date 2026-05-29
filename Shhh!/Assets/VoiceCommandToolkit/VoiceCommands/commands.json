@@ -33,8 +33,9 @@
             "Contexts": [
                 "MENU",
                 "IN_GAME",
-                "HELP_SCREEN",
-                "MICROPHONE_CONFIG"
+                "CONTROLS",
+                "MICROPHONE",
+                "VICTORY"
             ]
         },
         {
@@ -50,15 +51,8 @@
             "ActionClassName": "ExitAction",
             "Parameters": [],
             "Contexts": [
-                "HELP_SCREEN"
-            ]
-        },
-        {
-            "Command": "back",
-            "ActionClassName": "BackAction",
-            "Parameters": [],
-            "Contexts": [
-                "HELP_SCREEN"
+                "CONTROLS",
+                "MICROPHONE"
             ]
         },
         {
@@ -101,6 +95,14 @@
             "Parameters": [],
             "Contexts": [
                 "IN_GAME"
+            ]
+        },
+        {
+            "Command": "next",
+            "ActionClassName": "NextAction",
+            "Parameters": [],
+            "Contexts": [
+                "MICROPHONE"
             ]
         }
     ]

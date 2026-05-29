@@ -23,6 +23,7 @@ public class GameManager : MonoBehaviour
             Instance = this;
             DontDestroyOnLoad(gameObject); // No destruir al cambiar de escena
             SceneManager.sceneLoaded += OnSceneLoaded;
+            
         }
         else
         {
@@ -227,6 +228,15 @@ public class GameManager : MonoBehaviour
             if (voiceRecogniser)
             {
                 GameObject.Find("ControlC").SetActive(false);
+                Button helpButton = GameObject.Find("Control").GetComponent<Button>();
+                Button microphoneButton = GameObject.Find("Tutorial").GetComponent<Button>();
+                Button backButton = GameObject.Find("CanvasTutorial").transform.Find("Guia/Step 4/Back").GetComponent<Button>();
+                Button backButton2 = GameObject.Find("Canvas").transform.Find("Controls/Back").GetComponent<Button>();
+
+                helpButton.onClick.AddListener(OnHelpButtonClicked);
+                microphoneButton.onClick.AddListener(OnMicrophoneButtonClicked);
+                backButton.onClick.AddListener(OnBackButtonClicked);
+                backButton2.onClick.AddListener(OnBackButtonClicked);
             }
             else
             {
@@ -279,5 +289,26 @@ public class GameManager : MonoBehaviour
                 Debug.LogWarning($"[GameManager] Escena '{sceneName}' sin contexto específico. Se usará GLOBAL.");
                 break;
         }
+    }
+
+    private void OnHelpButtonClicked()
+    {
+        Debug.Log("Botón pulsado");
+
+        VoiceCommandManager.Instance.PushContext("CONTROLS");
+    }
+
+    private void OnMicrophoneButtonClicked()
+    {
+        Debug.Log("Botón pulsado");
+
+        VoiceCommandManager.Instance.PushContext("MICROPHONE");
+    }
+
+    private void OnBackButtonClicked()
+    {
+        Debug.Log("Botón pulsado");
+
+        VoiceCommandManager.Instance.PopContext();
     }
 }

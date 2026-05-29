@@ -7,15 +7,6 @@ public class LookAction : IVoiceAction
 {
     public void Execute(params object[] parameters)
     {
-        string currentScene = SceneManager.GetActiveScene().name;
-        string[] validScenes = { "Retiro", "Cine", "Iglesia", "Mina" };
-
-        if (!Array.Exists(validScenes, scene => scene.Equals(currentScene, StringComparison.OrdinalIgnoreCase)))
-        {
-            Debug.LogWarning($"[LookAction] No se puede ejecutar en la escena '{currentScene}'.");
-            return;
-        }
-
         if (parameters == null || parameters.Length == 0)
         {
             Debug.LogWarning("[LookAction] No se recibió ninguna dirección (up/down/left/right).");

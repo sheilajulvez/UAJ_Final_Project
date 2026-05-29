@@ -7,15 +7,12 @@ using UnityEngine.UI; // Necesario para SceneManager
 using AudioDetection.Interfaces;
 public class HelpAction : IVoiceAction {
     public void Execute(params object[] parameters) {
-        if (SceneManager.GetActiveScene().name != "Selection" && SceneManager.GetActiveScene().name != "Victory")
+        
+        GameObject control = GameObject.Find("Control");
+        if (control != null)
         {
-            GameObject control = GameObject.Find("Control");
-            if (control != null)
-            {
-                control.GetComponent<Button>().onClick.Invoke();
-                //control.SetActive(false);
-                // controlSave = control;
-            }
+            control.GetComponent<Button>().onClick.Invoke();
         }
+        
     }
 }

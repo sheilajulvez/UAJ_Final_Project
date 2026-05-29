@@ -44,9 +44,9 @@ public class VoiceCommandManager : MonoBehaviour
 
     private string currentContext = "SELECTION";
 
-    private string previousContext = "GLOBAL";
+    private string previousContext = "SELECTION";
 
-    
+
 
     private TextMeshProUGUI hypothesisText;
     private TextMeshProUGUI contextText;
