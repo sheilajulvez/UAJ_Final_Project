@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using AudioDetection.Interfaces;
+using UAJ.Telemetry;
 
 public class VoiceCommandManager : MonoBehaviour
 {
@@ -109,14 +110,55 @@ public class VoiceCommandManager : MonoBehaviour
             try
             {
                 action.Execute(parameters);
+                TrackVoiceEvent(
+                    "voice_command_executed",
+                    new Dictionary<string, object>
+                    {
+                        { "spoken_command", phrase ?? string.Empty },
+                        { "resolved_command", key },
+                        { "used_alias", !string.Equals((phrase ?? string.Empty).Trim().ToLower(), key, StringComparison.OrdinalIgnoreCase) },
+                        { "parameters", SerializeParameters(parameters) },
+                        { "parameter_count", parameters?.Length ?? 0 },
+                        { "scene", UnityEngine.SceneManagement.SceneManager.GetActiveScene().name },
+                        { "context", GetCurrentContext() }
+                    }
+                );
             }
             catch (Exception e)
             {
+                TrackVoiceEvent(
+                    "voice_command_execution_failed",
+                    new Dictionary<string, object>
+                    {
+                        { "spoken_command", phrase ?? string.Empty },
+                        { "resolved_command", key },
+                        { "used_alias", !string.Equals((phrase ?? string.Empty).Trim().ToLower(), key, StringComparison.OrdinalIgnoreCase) },
+                        { "parameters", SerializeParameters(parameters) },
+                        { "parameter_count", parameters?.Length ?? 0 },
+                        { "error_reason", e.Message },
+                        { "scene", UnityEngine.SceneManagement.SceneManager.GetActiveScene().name },
+                        { "context", GetCurrentContext() }
+                    }
+                );
                 Debug.LogError($"Error al ejecutar el comando '{phrase}': {e.Message}");
             }
         }
         else
         {
+            TrackVoiceEvent(
+                "voice_command_execution_failed",
+                new Dictionary<string, object>
+                {
+                    { "spoken_command", phrase ?? string.Empty },
+                    { "resolved_command", key },
+                    { "used_alias", !string.Equals((phrase ?? string.Empty).Trim().ToLower(), key, StringComparison.OrdinalIgnoreCase) },
+                    { "parameters", SerializeParameters(parameters) },
+                    { "parameter_count", parameters?.Length ?? 0 },
+                    { "error_reason", "command_not_registered" },
+                    { "scene", UnityEngine.SceneManagement.SceneManager.GetActiveScene().name },
+                    { "context", GetCurrentContext() }
+                }
+            );
             Debug.LogWarning($"Comando no reconocido: '{phrase}'");
         }
     }
@@ -124,5 +166,25 @@ public class VoiceCommandManager : MonoBehaviour
     private static string NormalizeCommand(string command)
     {
         return string.IsNullOrWhiteSpace(command) ? string.Empty : command.Trim().ToLower();
+    }
+
+    private static string SerializeParameters(object[] parameters)
+    {
+        if (parameters == null || parameters.Length == 0)
+        {
+            return string.Empty;
+        }
+
+        return string.Join(" ", parameters);
+    }
+
+    private static void TrackVoiceEvent(string eventName, Dictionary<string, object> data)
+    {
+        if (Tracker.Instance.serializer == null || Tracker.Instance.persistence == null)
+        {
+            return;
+        }
+
+        Tracker.Instance.TrackEvent(new TrackerEvent(eventName, "VoiceCommandTracker", data));
     }
 }

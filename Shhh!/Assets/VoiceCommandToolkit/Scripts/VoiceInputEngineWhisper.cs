@@ -1,14 +1,11 @@
-using AudioDetection.Interfaces;
 using System;
 using System.Collections;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-using TMPro;
+using AudioDetection.Interfaces;
 using UnityEngine;
-using UnityEngine.UI;
+using UAJ.Telemetry;
 
 public class VoiceInputEngineWhisper : BaseVoiceInputEngine
 {
@@ -17,22 +14,17 @@ public class VoiceInputEngineWhisper : BaseVoiceInputEngine
 
     public override event Action<string, object[]> OnCommandRecognized;
 
-    [SerializeField]
-    private string modelo = "ggml-tiny.en.bin";
-    [SerializeField]
-    private float durationSeconds = 5.0f;
-    [SerializeField]
-    private float waitNextCommandSeconds = 1.0f;
+    [SerializeField] private string modelo = "ggml-tiny.en.bin";
+    [SerializeField] private float durationSeconds = 5.0f;
+    [SerializeField] private float waitNextCommandSeconds = 1.0f;
 
     private string[] commandsBase;
-
     private AudioClip recordingClip;
-    private int sampleRate = 16000;  // whisper funciona bien con 16kHz
+    private int sampleRate = 16000;
 
     public override void Initialize(string[] commands)
     {
         commandsBase = commands;
-
         StartCoroutine(ContinuousRecordingAndRecognition());
     }
 
@@ -41,7 +33,9 @@ public class VoiceInputEngineWhisper : BaseVoiceInputEngine
         while (true)
         {
             if (hypothesisText != null)
+            {
                 hypothesisText.text = "Escuchando...";
+            }
 
             StartRecording();
             yield return WaitAndProcessRecording(durationSeconds);
@@ -52,9 +46,11 @@ public class VoiceInputEngineWhisper : BaseVoiceInputEngine
     {
         if (Microphone.devices.Length == 0)
         {
-            UnityEngine.Debug.LogError("No hay micr�fono disponible.");
+            UnityEngine.Debug.LogError("No hay microfono disponible.");
             if (hypothesisText != null)
-                hypothesisText.text = "No hay micr�fono disponible";
+            {
+                hypothesisText.text = "No hay microfono disponible";
+            }
             return;
         }
 
@@ -63,40 +59,38 @@ public class VoiceInputEngineWhisper : BaseVoiceInputEngine
 
         if (recordingClip == null)
         {
-            UnityEngine.Debug.LogError("No se pudo iniciar la grabaci�n.");
+            UnityEngine.Debug.LogError("No se pudo iniciar la grabacion.");
             return;
         }
 
-        UnityEngine.Debug.Log("Grabaci�n iniciada");
+        UnityEngine.Debug.Log("Grabacion iniciada");
     }
 
     private IEnumerator WaitAndProcessRecording(float duration)
     {
-        // Espera a que el mic termine de grabar
         while (Microphone.IsRecording(null) && Microphone.GetPosition(null) <= 0)
+        {
             yield return null;
+        }
 
         while (Microphone.IsRecording(null) && Microphone.GetPosition(null) < sampleRate * duration)
+        {
             yield return null;
+        }
 
         Microphone.End(null);
 
-        UnityEngine.Debug.Log("Grabaci�n terminada. Guardando archivo WAV...");
-
+        UnityEngine.Debug.Log("Grabacion terminada. Guardando archivo WAV...");
         WavUtils.Save(audioFilePath, recordingClip);
-
         UnityEngine.Debug.Log("Archivo guardado en: " + audioFilePath);
 
         var whisperTask = RunWhisperDllAsync(audioFilePath);
         while (!whisperTask.IsCompleted)
+        {
             yield return null;
+        }
 
-        string transcription = whisperTask.Result;
-
-        ProcessTranscription(transcription);
-
-
-        // Espera 1 segundo para mostrar el resultado antes de la siguiente grabaci�n
+        ProcessTranscription(whisperTask.Result);
         yield return new WaitForSeconds(waitNextCommandSeconds);
     }
 
@@ -108,14 +102,14 @@ public class VoiceInputEngineWhisper : BaseVoiceInputEngine
 
             if (!File.Exists(modelPath))
             {
-                UnityEngine.Debug.LogError("No se encontr� el modelo en: " + modelPath);
-                return "";
+                UnityEngine.Debug.LogError("No se encontro el modelo en: " + modelPath);
+                return string.Empty;
             }
 
             if (!File.Exists(audioPath))
             {
-                UnityEngine.Debug.LogError("No se encontr� el archivo de audio en: " + audioPath);
-                return "";
+                UnityEngine.Debug.LogError("No se encontro el archivo de audio en: " + audioPath);
+                return string.Empty;
             }
 
             try
@@ -125,47 +119,63 @@ public class VoiceInputEngineWhisper : BaseVoiceInputEngine
             catch (Exception e)
             {
                 UnityEngine.Debug.LogError("Error al llamar a la DLL: " + e.Message);
-                return "";
+                return string.Empty;
             }
         });
     }
-
 
     private void ProcessTranscription(string transcription)
     {
         if (string.IsNullOrEmpty(transcription) || transcription.Trim().Length < 3)
         {
             if (panelImage != null)
+            {
                 panelImage.sprite = invalid;
+            }
+
             if (hypothesisText != null)
+            {
                 hypothesisText.text = "No Reconozco el comando de Voz";
+            }
+
+            TrackVoiceRecognitionEvent("voice_command_not_recognized", transcription, string.Empty, null);
             return;
         }
 
-        // Limpiar puntuaci�n al final, ejemplo quitando punto, coma, signo de interrogaci�n, etc.
         string phrase = transcription.ToLower().Trim().TrimEnd('.', ',', '!', '?');
-
         if (phrase.Length < 3)
         {
             if (panelImage != null)
+            {
                 panelImage.sprite = invalid;
+            }
+
             if (hypothesisText != null)
+            {
                 hypothesisText.text = "No Reconozco el comando de Voz";
+            }
+
+            TrackVoiceRecognitionEvent("voice_command_not_recognized", phrase, string.Empty, null);
             return;
         }
 
-        // Opcional: filtro para palabras irrelevantes t�picas (como "you", "uh", etc)
         string[] ignoreWords = { "you", "uh", "um", "ah", "mm" };
-        if (ignoreWords.Contains(phrase.ToLower()))
+        if (ignoreWords.Contains(phrase))
         {
             if (panelImage != null)
+            {
                 panelImage.sprite = invalid;
+            }
+
             if (hypothesisText != null)
+            {
                 hypothesisText.text = "No Reconozco el comando de Voz";
+            }
+
+            TrackVoiceRecognitionEvent("voice_command_not_recognized", phrase, string.Empty, null);
             return;
         }
 
-        // Resto del c�digo para buscar comandos...
         string matchedCommand = null;
         foreach (var cmd in commandsBase)
         {
@@ -179,23 +189,36 @@ public class VoiceInputEngineWhisper : BaseVoiceInputEngine
         if (matchedCommand != null)
         {
             if (panelImage != null)
+            {
                 panelImage.sprite = valid;
+            }
+
             if (hypothesisText != null)
+            {
                 hypothesisText.text = phrase;
+            }
 
             string paramsString = phrase.Substring(matchedCommand.Length).Trim();
             object[] parameters = string.IsNullOrEmpty(paramsString)
                 ? Array.Empty<object>()
                 : paramsString.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Cast<object>().ToArray();
 
+            TrackVoiceRecognitionEvent("voice_command_recognized", phrase, matchedCommand, parameters);
             OnCommandRecognized?.Invoke(matchedCommand, parameters);
         }
         else
         {
             if (panelImage != null)
+            {
                 panelImage.sprite = invalid;
+            }
+
             if (hypothesisText != null)
+            {
                 hypothesisText.text = phrase;
+            }
+
+            TrackVoiceRecognitionEvent("voice_command_not_recognized", phrase, string.Empty, null);
             UnityEngine.Debug.LogWarning($"Comando no reconocido: '{phrase}'");
         }
 
@@ -204,7 +227,31 @@ public class VoiceInputEngineWhisper : BaseVoiceInputEngine
 
     private IEnumerator WaitBeforeNextRecognition()
     {
-        yield return new WaitForSeconds(waitNextCommandSeconds);  // Espera para mostrar el comando
+        yield return new WaitForSeconds(waitNextCommandSeconds);
     }
 
+    private static void TrackVoiceRecognitionEvent(string eventName, string rawPhrase, string matchedCommand, object[] parameters)
+    {
+        if (Tracker.Instance.serializer == null || Tracker.Instance.persistence == null)
+        {
+            return;
+        }
+
+        Tracker.Instance.TrackEvent(
+            new TrackerEvent(
+                eventName,
+                "VoiceCommandTracker",
+                new System.Collections.Generic.Dictionary<string, object>
+                {
+                    { "raw_phrase", rawPhrase ?? string.Empty },
+                    { "matched_command", matchedCommand ?? string.Empty },
+                    { "parameters", parameters == null || parameters.Length == 0 ? string.Empty : string.Join(" ", parameters) },
+                    { "parameter_count", parameters?.Length ?? 0 },
+                    { "engine", nameof(VoiceInputEngineWhisper) },
+                    { "scene", UnityEngine.SceneManagement.SceneManager.GetActiveScene().name },
+                    { "context", VoiceCommandManager.Instance != null ? VoiceCommandManager.Instance.GetCurrentContext() : "UNKNOWN" }
+                }
+            )
+        );
+    }
 }

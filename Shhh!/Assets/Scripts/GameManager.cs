@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UAJ.Telemetry;
 
 
 public class GameManager : MonoBehaviour
@@ -14,6 +15,7 @@ public class GameManager : MonoBehaviour
     private int coinsCollected = 0;
 
     private string currentScene = "";
+    private bool telemetrySessionStarted;
 
     private void Awake()
     {
@@ -22,12 +24,18 @@ public class GameManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject); // No destruir al cambiar de escena
+
             SceneManager.sceneLoaded += OnSceneLoaded;
         }
         else
         {
             Destroy(gameObject); // Evitar duplicados
         }
+    }
+
+    private void Start()
+    {
+        EnsureTelemetrySessionStarted();
     }
    
 
@@ -205,6 +213,11 @@ public class GameManager : MonoBehaviour
     {
         if (currentScene == scene) return;
 
+        if (!string.IsNullOrEmpty(currentScene) && Tracker.Instance.serializer != null && Tracker.Instance.persistence != null)
+        {
+            Tracker.Instance.TrackLevelEnd(SceneManager.GetActiveScene().buildIndex);
+        }
+
         SceneManager.LoadScene(scene);
         currentScene = scene;
         
@@ -220,6 +233,11 @@ public class GameManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        if (Tracker.Instance.serializer != null && Tracker.Instance.persistence != null)
+        {
+            EnsureTelemetrySessionStarted();
+            Tracker.Instance.TrackLevelStart(scene.buildIndex);
+        }
 
         UpdateVoiceContextByScene(scene.name);
         if (scene.name == "Menu")
@@ -278,6 +296,15 @@ public class GameManager : MonoBehaviour
                 VoiceCommandManager.Instance.SetContext("GLOBAL");
                 Debug.LogWarning($"[GameManager] Escena '{sceneName}' sin contexto específico. Se usará GLOBAL.");
                 break;
+        }
+    }
+
+    private void EnsureTelemetrySessionStarted()
+    {
+        if (!telemetrySessionStarted && Tracker.Instance.serializer != null && Tracker.Instance.persistence != null)
+        {
+            Tracker.Instance.TrackSessionStartEvent(Tracker.Instance.GetSessionId());
+            telemetrySessionStarted = true;
         }
     }
 }
