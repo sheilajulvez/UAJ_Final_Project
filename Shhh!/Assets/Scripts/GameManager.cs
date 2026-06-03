@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     private int coinsCollected = 0;
 
     private string currentScene = "";
+    private bool telemetrySessionStarted;
 
     private void Awake()
     {
@@ -22,6 +23,7 @@ public class GameManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject); // No destruir al cambiar de escena
+
             SceneManager.sceneLoaded += OnSceneLoaded;
             
         }
@@ -29,6 +31,11 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject); // Evitar duplicados
         }
+    }
+
+    private void Start()
+    {
+        EnsureTelemetrySessionStarted();
     }
    
 
@@ -206,6 +213,11 @@ public class GameManager : MonoBehaviour
     {
         if (currentScene == scene) return;
 
+        if (!string.IsNullOrEmpty(currentScene) && IsTelemetryReady())
+        {
+            Tracker.Instance.TrackLevelEnd(SceneManager.GetActiveScene().buildIndex);
+        }
+
         SceneManager.LoadScene(scene);
         currentScene = scene;
         
@@ -221,6 +233,15 @@ public class GameManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        EnsureTelemetrySessionStarted();
+
+        if (IsTelemetryReady())
+        {
+            Tracker.Instance.TrackLevelStart(scene.buildIndex);
+        }
+
+        currentScene = scene.name;
+
 
         UpdateVoiceContextByScene(scene.name);
         if (scene.name == "Menu")
@@ -310,5 +331,23 @@ public class GameManager : MonoBehaviour
         Debug.Log("Botón pulsado");
 
         VoiceCommandManager.Instance.PopContext();
+    }
+
+    private void EnsureTelemetrySessionStarted()
+    {
+        if (telemetrySessionStarted || !IsTelemetryReady())
+        {
+            return;
+        }
+
+        Tracker.Instance.TrackSessionStartEvent(Tracker.Instance.GetSessionId());
+        telemetrySessionStarted = true;
+    }
+
+    private static bool IsTelemetryReady()
+    {
+        return Tracker.Instance != null
+            && Tracker.Instance.persistence != null
+            && !string.IsNullOrEmpty(Tracker.Instance.GetSessionId());
     }
 }

@@ -1,0 +1,35 @@
+using System;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Analytics;
+
+public class TrackerEvent
+{
+    public string trackerName;
+    public string eventName;
+    public Dictionary<string, object> parameters;
+    private const string EVENT_VERSION = "1.1";
+    private const string APP_NAME = "AMONRA";
+    private const string APP_VERSION = "1.1";
+    private const string CLIENT_ID = "jugador_desconocido";
+
+    public TrackerEvent(string eventName, string trackerName, Dictionary<string, object> extraParameters)
+    {
+        this.eventName = eventName;
+        this.trackerName = trackerName;
+        parameters = new Dictionary<string, object>();
+
+        parameters["event_version"] = EVENT_VERSION;
+        parameters["event_id"] = Guid.NewGuid().ToString();
+        parameters["event_timestamp"] = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+        parameters["event_type"] = eventName;
+        parameters["app_name"] = APP_NAME;
+        parameters["app_version"] = APP_VERSION;
+        parameters["client_id"] = CLIENT_ID;
+
+        foreach (var elem in extraParameters)
+        {
+            parameters[elem.Key] = elem.Value;
+        }
+    }
+}
