@@ -75,6 +75,8 @@ public class VoiceLoader : MonoBehaviour
             }
         }
 
+        keywords.Sort((left, right) => right.Length.CompareTo(left.Length));
+
         inputEngine.Initialize(keywords.ToArray());
 
         inputEngine.OnCommandRecognized += (command, parameters) =>

@@ -41,29 +41,24 @@ public class VoiceInputEngineWindows : BaseVoiceInputEngine
         string phrase = text.Trim();
         Debug.Log($"[VoiceInputEngine] Dictation resultado: '{phrase}' (confianza: {confidence})");
 
-        string matchedCommand = null;
+        string matchedCommand = FindBestMatchingCommand(phrase);
 
-        foreach (var cmd in commandsBase)
+        if (!string.IsNullOrEmpty(matchedCommand))
         {
-            Debug.Log($"[VoiceInputEngine] Comprobando si '{phrase}' empieza con '{cmd}'...");
-            if (phrase.StartsWith(cmd, StringComparison.OrdinalIgnoreCase))
+            Debug.Log($"[VoiceInputEngine] Comando base detectado: '{matchedCommand}'");
+
+            if (hypothesisText != null)
             {
-                matchedCommand = cmd;
-                Debug.Log($"[VoiceInputEngine] Comando base detectado: '{matchedCommand}'");
-
-                if (hypothesisText != null)
-                {
-                    hypothesisText.text = text;
-                }
-
-                if (panelImage != null)
-                {
-                    panelImage.sprite = valid;
-                }
-
-                break;
+                hypothesisText.text = text;
             }
 
+            if (panelImage != null)
+            {
+                panelImage.sprite = valid;
+            }
+        }
+        else
+        {
             if (hypothesisText != null)
             {
                 hypothesisText.text = text;
@@ -197,6 +192,27 @@ public class VoiceInputEngineWindows : BaseVoiceInputEngine
             dictationRecognizer.Dispose();
             dictationRecognizer = null;
         }
+    }
+
+    private string FindBestMatchingCommand(string phrase)
+    {
+        string bestMatch = null;
+
+        foreach (var cmd in commandsBase)
+        {
+            Debug.Log($"[VoiceInputEngine] Comprobando si '{phrase}' empieza con '{cmd}'...");
+            if (!phrase.StartsWith(cmd, StringComparison.OrdinalIgnoreCase))
+            {
+                continue;
+            }
+
+            if (bestMatch == null || cmd.Length > bestMatch.Length)
+            {
+                bestMatch = cmd;
+            }
+        }
+
+        return bestMatch;
     }
 
     private static void TrackVoiceRecognitionEvent(string eventName, string rawPhrase, string matchedCommand, object[] parameters)

@@ -176,15 +176,7 @@ public class VoiceInputEngineWhisper : BaseVoiceInputEngine
             return;
         }
 
-        string matchedCommand = null;
-        foreach (var cmd in commandsBase)
-        {
-            if (phrase.StartsWith(cmd, StringComparison.OrdinalIgnoreCase))
-            {
-                matchedCommand = cmd;
-                break;
-            }
-        }
+        string matchedCommand = FindBestMatchingCommand(phrase);
 
         if (matchedCommand != null)
         {
@@ -228,6 +220,26 @@ public class VoiceInputEngineWhisper : BaseVoiceInputEngine
     private IEnumerator WaitBeforeNextRecognition()
     {
         yield return new WaitForSeconds(waitNextCommandSeconds);
+    }
+
+    private string FindBestMatchingCommand(string phrase)
+    {
+        string bestMatch = null;
+
+        foreach (var cmd in commandsBase)
+        {
+            if (!phrase.StartsWith(cmd, StringComparison.OrdinalIgnoreCase))
+            {
+                continue;
+            }
+
+            if (bestMatch == null || cmd.Length > bestMatch.Length)
+            {
+                bestMatch = cmd;
+            }
+        }
+
+        return bestMatch;
     }
 
     private static void TrackVoiceRecognitionEvent(string eventName, string rawPhrase, string matchedCommand, object[] parameters)
