@@ -75,14 +75,13 @@ public class VoiceLoader : MonoBehaviour
             }
         }
 
-        keywords.Sort((left, right) => right.Length.CompareTo(left.Length));
-
-        inputEngine.Initialize(keywords.ToArray());
-
         inputEngine.OnCommandRecognized += (command, parameters) =>
         {
             VoiceCommandManager.Instance.HandleCommand(command, parameters);
         };
+
+        keywords.Sort((left, right) => right.Length.CompareTo(left.Length));
+        inputEngine.Initialize(keywords.ToArray());
     }
 
     private static void AddKeyword(string value, HashSet<string> uniqueKeywords, List<string> keywords)

@@ -62,7 +62,6 @@ public class VoiceCommandEditorWindow : EditorWindow
             EditorGUILayout.LabelField($"Comando: {cmd.Command} -> {ToClassName(cmd.Command)}", EditorStyles.boldLabel);
 
             EditorGUILayout.LabelField("Parametros:", EditorStyles.miniBoldLabel);
-
             for (int j = cmd.Parameters.Count - 1; j >= 0; j--)
             {
                 EditorGUILayout.BeginHorizontal();
@@ -95,7 +94,6 @@ public class VoiceCommandEditorWindow : EditorWindow
             EditorGUILayout.EndHorizontal();
 
             GUILayout.Space(4);
-
             EditorGUILayout.LabelField("Aliases (sinonimos aceptados):", EditorStyles.miniBoldLabel);
 
             if (cmd.Aliases.Count == 0)

@@ -8,10 +8,7 @@ public class VoiceCommandManager : MonoBehaviour
 {
     public static VoiceCommandManager Instance;
 
-    // Diccionario principal: comando normalizado -> accion
     private readonly Dictionary<string, IVoiceAction> commands = new();
-
-    // Diccionario de aliases: alias normalizado -> comando principal normalizado
     private readonly Dictionary<string, string> aliasToCommand = new();
 
     // Se mantiene por compatibilidad con llamadas existentes del proyecto.
@@ -30,9 +27,6 @@ public class VoiceCommandManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Registra un comando principal y su accion asociada.
-    /// </summary>
     public void RegisterCommand(string phrase, IVoiceAction action)
     {
         string key = NormalizeCommand(phrase);
@@ -52,9 +46,6 @@ public class VoiceCommandManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Registra un alias que apunta al comando principal indicado.
-    /// </summary>
     public void RegisterAlias(string alias, string primaryCommand)
     {
         string aliasKey = NormalizeCommand(alias);
@@ -62,6 +53,12 @@ public class VoiceCommandManager : MonoBehaviour
 
         if (string.IsNullOrWhiteSpace(aliasKey) || string.IsNullOrWhiteSpace(primaryKey))
         {
+            return;
+        }
+
+        if (commands.ContainsKey(aliasKey))
+        {
+            Debug.LogWarning($"El alias '{alias}' no se ha registrado porque ya existe como comando principal.");
             return;
         }
 
@@ -75,16 +72,12 @@ public class VoiceCommandManager : MonoBehaviour
         Debug.Log($"[VoiceCommandManager] Alias registrado: '{aliasKey}' -> '{primaryKey}'");
     }
 
-    /// <summary>
-    /// Devuelve el comando principal asociado a una frase.
-    /// </summary>
     public string ResolveCommand(string phrase)
     {
         string key = NormalizeCommand(phrase);
         return aliasToCommand.TryGetValue(key, out string primaryCommand) ? primaryCommand : key;
     }
 
-    // Compatibilidad con el flujo actual del juego.
     public void SetContext(string context)
     {
         currentContext = string.IsNullOrWhiteSpace(context) ? "GLOBAL" : context.Trim().ToUpper();
@@ -104,6 +97,7 @@ public class VoiceCommandManager : MonoBehaviour
     public void HandleCommand(string phrase, object[] parameters)
     {
         string key = ResolveCommand(phrase);
+        bool usedAlias = !string.Equals(NormalizeCommand(phrase), key, StringComparison.OrdinalIgnoreCase);
 
         if (commands.TryGetValue(key, out var action))
         {
@@ -116,7 +110,7 @@ public class VoiceCommandManager : MonoBehaviour
                     {
                         { "spoken_command", phrase ?? string.Empty },
                         { "resolved_command", key },
-                        { "used_alias", !string.Equals((phrase ?? string.Empty).Trim().ToLower(), key, StringComparison.OrdinalIgnoreCase) },
+                        { "used_alias", usedAlias },
                         { "parameters", SerializeParameters(parameters) },
                         { "parameter_count", parameters?.Length ?? 0 },
                         { "scene", UnityEngine.SceneManagement.SceneManager.GetActiveScene().name },
@@ -132,7 +126,7 @@ public class VoiceCommandManager : MonoBehaviour
                     {
                         { "spoken_command", phrase ?? string.Empty },
                         { "resolved_command", key },
-                        { "used_alias", !string.Equals((phrase ?? string.Empty).Trim().ToLower(), key, StringComparison.OrdinalIgnoreCase) },
+                        { "used_alias", usedAlias },
                         { "parameters", SerializeParameters(parameters) },
                         { "parameter_count", parameters?.Length ?? 0 },
                         { "error_reason", e.Message },
@@ -151,7 +145,7 @@ public class VoiceCommandManager : MonoBehaviour
                 {
                     { "spoken_command", phrase ?? string.Empty },
                     { "resolved_command", key },
-                    { "used_alias", !string.Equals((phrase ?? string.Empty).Trim().ToLower(), key, StringComparison.OrdinalIgnoreCase) },
+                    { "used_alias", usedAlias },
                     { "parameters", SerializeParameters(parameters) },
                     { "parameter_count", parameters?.Length ?? 0 },
                     { "error_reason", "command_not_registered" },

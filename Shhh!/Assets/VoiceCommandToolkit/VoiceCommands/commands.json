@@ -4,22 +4,13 @@
             "Command": "voice",
             "ActionClassName": "VoiceAction",
             "Parameters": [],
-            "Aliases": [
-                "voz",
-                "activar voz",
-                "desactivar voz"
-            ]
+            "Aliases": []
         },
         {
             "Command": "play",
             "ActionClassName": "PlayAction",
             "Parameters": [],
-            "Aliases": [
-                "start",
-                "jugar",
-                "comenzar",
-                "empezar"
-            ]
+            "Aliases": []
         },
         {
             "Command": "go",
@@ -29,8 +20,7 @@
             ],
             "Aliases": [
                 "travel",
-                "navigate",
-                "ir"
+                "navigate"
             ]
         },
         {
@@ -38,49 +28,33 @@
             "ActionClassName": "QuitAction",
             "Parameters": [],
             "Aliases": [
-                "leave",
-                "salir",
-                "cerrar"
+                "leave"
             ]
         },
         {
             "Command": "microphone",
             "ActionClassName": "MicrophoneAction",
             "Parameters": [],
-            "Aliases": [
-                "mic",
-                "microfono",
-                "configurar microfono"
-            ]
+            "Aliases": []
         },
         {
             "Command": "exit",
             "ActionClassName": "ExitAction",
             "Parameters": [],
-            "Aliases": [
-                "volver",
-                "regresar",
-                "menu"
-            ]
+            "Aliases": []
         },
         {
             "Command": "back",
             "ActionClassName": "BackAction",
             "Parameters": [],
-            "Aliases": [
-                "atras",
-                "anterior"
-            ]
+            "Aliases": []
         },
         {
             "Command": "help",
             "ActionClassName": "HelpAction",
             "Parameters": [],
             "Aliases": [
-                "commands",
-                "ayuda",
-                "comandos",
-                "socorro"
+                "commands"
             ]
         },
         {
@@ -90,9 +64,7 @@
             "Aliases": [
                 "walk",
                 "forward",
-                "advance",
-                "adelante",
-                "avanzar"
+                "advance"
             ]
         },
         {
@@ -103,9 +75,7 @@
             ],
             "Aliases": [
                 "turn",
-                "rotate",
-                "mirar",
-                "girar"
+                "rotate"
             ]
         },
         {
@@ -114,22 +84,14 @@
             "Parameters": [],
             "Aliases": [
                 "grab",
-                "take",
-                "coger",
-                "recoger",
-                "agarrar"
+                "take"
             ]
         },
         {
             "Command": "coin",
             "ActionClassName": "CoinAction",
             "Parameters": [],
-            "Aliases": [
-                "moneda",
-                "estrella",
-                "star",
-                "collect"
-            ]
+            "Aliases": []
         }
     ]
 }
