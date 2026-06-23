@@ -266,7 +266,7 @@ public class GameManager : MonoBehaviour
                 GameObject.Find("Control").SetActive(false);
             }
             GameObject.Find("QuitButton").GetComponent<Button>().onClick.AddListener(() => QuitGame());
-            GameObject.Find("PlayButton").GetComponent<Button>().onClick.AddListener(() => LoadScene("Iglesia"));
+            GameObject.Find("PlayButton").GetComponent<Button>().onClick.AddListener(() => LoadScene("Retiro"));
         }
         else if (scene.name == "Victory")
         {
