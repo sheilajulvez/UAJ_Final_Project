@@ -1,0 +1,7 @@
+{
+  "trackers": {
+    "ProgressionTracker": true,
+    "ResourceTracker": true,
+    "VoiceCommandTracker": true
+  }
+}

@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UAJ.Telemetry;
 
 
 public class GameManager : MonoBehaviour
@@ -14,6 +15,7 @@ public class GameManager : MonoBehaviour
     private int coinsCollected = 0;
 
     private string currentScene = "";
+    private bool telemetrySessionStarted;
 
     private void Awake()
     {
@@ -28,6 +30,12 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject); // Evitar duplicados
         }
+    }
+
+    private void Start()
+    {
+        currentScene = SceneManager.GetActiveScene().name;
+        EnsureTelemetrySessionStarted();
     }
    
 
@@ -205,6 +213,11 @@ public class GameManager : MonoBehaviour
     {
         if (currentScene == scene) return;
 
+        if (!string.IsNullOrEmpty(currentScene) && Tracker.Instance.serializer != null && Tracker.Instance.persistence != null)
+        {
+            Tracker.Instance.TrackLevelEnd(SceneManager.GetActiveScene().buildIndex);
+        }
+
         SceneManager.LoadScene(scene);
         currentScene = scene;
         
@@ -220,6 +233,12 @@ public class GameManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        if (Tracker.Instance.serializer != null && Tracker.Instance.persistence != null)
+        {
+            EnsureTelemetrySessionStarted();
+            Tracker.Instance.TrackLevelStart(scene.buildIndex);
+        }
+
         if (scene.name == "Menu")
         {
             if (voiceRecogniser)
@@ -240,6 +259,15 @@ public class GameManager : MonoBehaviour
             Cursor.lockState = CursorLockMode.None; // Libera el cursor
             Cursor.visible = true;                  // Muestra el cursor
             GameObject.Find("QuitButton").GetComponent<Button>().onClick.AddListener(() => QuitGame());
+        }
+    }
+
+    private void EnsureTelemetrySessionStarted()
+    {
+        if (!telemetrySessionStarted && Tracker.Instance.serializer != null && Tracker.Instance.persistence != null)
+        {
+            Tracker.Instance.TrackSessionStartEvent(Tracker.Instance.GetSessionId());
+            telemetrySessionStarted = true;
         }
     }
 }

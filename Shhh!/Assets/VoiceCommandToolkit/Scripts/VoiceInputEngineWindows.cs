@@ -6,6 +6,8 @@ using System.Collections;
 using UnityEngine.UI;
 using TMPro;
 using AudioDetection.Interfaces;
+using UAJ.Telemetry;
+using System.Collections.Generic;
 
 public class VoiceInputEngineWindows : BaseVoiceInputEngine
 {
@@ -75,6 +77,7 @@ public class VoiceInputEngineWindows : BaseVoiceInputEngine
 
         if (matchedCommand == null)
         {
+            TrackVoiceRecognitionEvent("voice_command_not_recognized", phrase, null, Array.Empty<object>());
             Debug.LogWarning($"[VoiceInputEngine] Comando no reconocido en frase: '{phrase}'");
             return;
         }
@@ -98,6 +101,7 @@ public class VoiceInputEngineWindows : BaseVoiceInputEngine
         }
 
         Debug.Log($"[VoiceInputEngine] Lanzando evento OnCommandRecognized con comando '{matchedCommand}' y {parameters.Length} par�metros.");
+        TrackVoiceRecognitionEvent("voice_command_recognized", phrase, matchedCommand, parameters);
         OnCommandRecognized?.Invoke(matchedCommand, parameters);
     }
 
@@ -201,5 +205,29 @@ public class VoiceInputEngineWindows : BaseVoiceInputEngine
             dictationRecognizer.Dispose();
             dictationRecognizer = null;
         }
+    }
+
+    private void TrackVoiceRecognitionEvent(string eventName, string phrase, string matchedCommand, object[] parameters)
+    {
+        if (Tracker.Instance == null || Tracker.Instance.persistence == null)
+        {
+            return;
+        }
+
+        string sceneName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+        string context = sceneName == "Selection" ? "SELECTION" : sceneName == "Menu" ? "MENU" : "IN_GAME";
+
+        var data = new Dictionary<string, object>
+        {
+            { "raw_phrase", phrase ?? string.Empty },
+            { "matched_command", matchedCommand ?? string.Empty },
+            { "parameter_count", parameters?.Length ?? 0 },
+            { "parameters", parameters == null ? Array.Empty<string>() : Array.ConvertAll(parameters, p => p?.ToString() ?? string.Empty) },
+            { "engine", nameof(VoiceInputEngineWindows) },
+            { "context", context },
+            { "scene", sceneName }
+        };
+
+        Tracker.Instance.TrackEvent(new TrackerEvent(eventName, "VoiceCommandTracker", data));
     }
 }
