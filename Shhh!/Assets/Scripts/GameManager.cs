@@ -35,6 +35,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        currentScene = SceneManager.GetActiveScene().name;
         EnsureTelemetrySessionStarted();
     }
    
