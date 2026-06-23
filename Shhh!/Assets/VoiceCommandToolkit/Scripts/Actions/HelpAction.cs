@@ -13,8 +13,6 @@ public class HelpAction : IVoiceAction {
             if (control != null)
             {
                 control.GetComponent<Button>().onClick.Invoke();
-                //control.SetActive(false);
-                // controlSave = control;
             }
         }
     }
