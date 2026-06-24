@@ -7,10 +7,17 @@ public class Tracker
 {
     public static Tracker Instance { get; private set; } = new Tracker();
 
+    private static readonly HashSet<string> AllowedEventNames = new HashSet<string>
+    {
+        EventType.SessionStart.ToString(),
+        EventType.SessionEnd.ToString(),
+        "voice_command_recognized",
+        "voice_command_not_recognized"
+    };
+
     public ISerializer serializer;
     public IPersistence persistence;
     private float startTime;
-    private float levelStart;
 
     Dictionary<string, bool> trackerMap = new Dictionary<string, bool>();
     private string sessionId;
@@ -39,7 +46,9 @@ public class Tracker
 
     public void TrackEvent(TrackerEvent eventToTrack)
     {
-        if (trackerMap[eventToTrack.trackerName])
+        if (AllowedEventNames.Contains(eventToTrack.eventName)
+            && trackerMap.TryGetValue(eventToTrack.trackerName, out bool enabled)
+            && enabled)
         {
             persistence.Enqueue(eventToTrack);
         }
@@ -64,27 +73,6 @@ public class Tracker
         };
 
         TrackEvent(new TrackerEvent(EventType.SessionEnd.ToString(), TrackerEventType.ProgressionTracker.ToString(), data));
-    }
-
-    public void TrackLevelStart(float levelId)
-    {
-        levelStart = Time.time;
-        Dictionary<string, object> data = new Dictionary<string, object>
-        {
-            { "level_id", levelId }
-        };
-
-        TrackEvent(new TrackerEvent(EventType.LevelStart.ToString(), TrackerEventType.ProgressionTracker.ToString(), data));
-    }
-
-    public void TrackLevelEnd(float levelId)
-    {
-        Dictionary<string, object> data = new Dictionary<string, object>
-        {
-            { "level_id", levelId }
-        };
-
-        TrackEvent(new TrackerEvent(EventType.LevelEnd.ToString(), TrackerEventType.ProgressionTracker.ToString(), data));
     }
 
     public void TrackFallDeath(float positionX)
