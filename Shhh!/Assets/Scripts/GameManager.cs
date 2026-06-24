@@ -214,11 +214,6 @@ public class GameManager : MonoBehaviour
     {
         if (currentScene == scene) return;
 
-        if (!string.IsNullOrEmpty(currentScene) && Tracker.Instance.serializer != null && Tracker.Instance.persistence != null)
-        {
-            Tracker.Instance.TrackLevelEnd(SceneManager.GetActiveScene().buildIndex);
-        }
-
         SceneManager.LoadScene(scene);
         currentScene = scene;
         
@@ -237,7 +232,6 @@ public class GameManager : MonoBehaviour
         if (Tracker.Instance.serializer != null && Tracker.Instance.persistence != null)
         {
             EnsureTelemetrySessionStarted();
-            Tracker.Instance.TrackLevelStart(scene.buildIndex);
         }
 
         UpdateVoiceContextByScene(scene.name);

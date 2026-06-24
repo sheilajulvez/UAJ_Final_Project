@@ -14,12 +14,17 @@ public class VoiceInputEngineWindows : BaseVoiceInputEngine
     private string[] commandsBase;
     private string lastInvokedPhrase = string.Empty;
     private float lastInvokeTime = -10f;
+    private string lastNotRecognizedPhrase = string.Empty;
+    private float lastNotRecognizedTime = -10f;
     private const float InvokeCooldownSeconds = 1.0f;
 
     public override event Action<string, object[]> OnCommandRecognized;
 
     public override void Initialize(string[] commands)
     {
+        EnsureFeedbackReferences();
+        SetFeedbackState(false);
+
         if (commands == null || commands.Length == 0)
         {
             Debug.LogWarning("No se proporcionaron comandos para reconocimiento.");
@@ -59,10 +64,7 @@ public class VoiceInputEngineWindows : BaseVoiceInputEngine
                 hypothesisText.text = text;
             }
 
-            if (panelImage != null)
-            {
-                panelImage.sprite = valid;
-            }
+            SetFeedbackState(true);
         }
         else
         {
@@ -71,22 +73,14 @@ public class VoiceInputEngineWindows : BaseVoiceInputEngine
                 hypothesisText.text = text;
             }
 
-            if (panelImage != null)
-            {
-                panelImage.sprite = invalid;
-            }
+            SetFeedbackState(false);
         }
 
-        if (matchedCommand == null)
+        if (string.IsNullOrEmpty(matchedCommand))
         {
             if (invokeCommand)
             {
-                TrackVoiceRecognitionEvent(
-                    "voice_command_not_recognized",
-                    phrase,
-                    string.Empty,
-                    null
-                );
+                TrackNotRecognizedIfNeeded(phrase);
             }
             Debug.LogWarning($"[VoiceInputEngine] Comando no reconocido en frase: '{phrase}'");
             return;
@@ -147,7 +141,11 @@ public class VoiceInputEngineWindows : BaseVoiceInputEngine
         if (exactKeyword || commandWithParameters)
         {
             ProcessRecognizedPhrase(text, ConfidenceLevel.Medium, true, "Hipotesis reconocida");
+            return;
         }
+
+        SetFeedbackState(false);
+        TrackNotRecognizedIfNeeded(text);
     }
 
     private bool isRestarting;
@@ -252,6 +250,31 @@ public class VoiceInputEngineWindows : BaseVoiceInputEngine
         string normalizedPhrase = NormalizePhrase(phrase);
         return string.Equals(lastInvokedPhrase, normalizedPhrase, StringComparison.OrdinalIgnoreCase)
             && Time.time - lastInvokeTime < InvokeCooldownSeconds;
+    }
+
+    private void TrackNotRecognizedIfNeeded(string phrase)
+    {
+        string normalizedPhrase = NormalizePhrase(phrase);
+        if (string.IsNullOrWhiteSpace(normalizedPhrase) || normalizedPhrase.Length < 2)
+        {
+            return;
+        }
+
+        if (string.Equals(lastNotRecognizedPhrase, normalizedPhrase, StringComparison.OrdinalIgnoreCase)
+            && Time.time - lastNotRecognizedTime < InvokeCooldownSeconds)
+        {
+            return;
+        }
+
+        TrackVoiceRecognitionEvent(
+            "voice_command_not_recognized",
+            phrase?.Trim(),
+            string.Empty,
+            null
+        );
+
+        lastNotRecognizedPhrase = normalizedPhrase;
+        lastNotRecognizedTime = Time.time;
     }
 
     private static string NormalizePhrase(string phrase)

@@ -24,6 +24,8 @@ public class VoiceInputEngineWhisper : BaseVoiceInputEngine
 
     public override void Initialize(string[] commands)
     {
+        EnsureFeedbackReferences();
+        SetFeedbackState(false);
         commandsBase = commands;
         StartCoroutine(ContinuousRecordingAndRecognition());
     }
@@ -32,6 +34,8 @@ public class VoiceInputEngineWhisper : BaseVoiceInputEngine
     {
         while (true)
         {
+            SetFeedbackState(false);
+
             if (hypothesisText != null)
             {
                 hypothesisText.text = "Escuchando...";
@@ -128,10 +132,7 @@ public class VoiceInputEngineWhisper : BaseVoiceInputEngine
     {
         if (string.IsNullOrEmpty(transcription) || transcription.Trim().Length < 3)
         {
-            if (panelImage != null)
-            {
-                panelImage.sprite = invalid;
-            }
+            SetFeedbackState(false);
 
             if (hypothesisText != null)
             {
@@ -145,10 +146,7 @@ public class VoiceInputEngineWhisper : BaseVoiceInputEngine
         string phrase = transcription.ToLower().Trim().TrimEnd('.', ',', '!', '?');
         if (phrase.Length < 3)
         {
-            if (panelImage != null)
-            {
-                panelImage.sprite = invalid;
-            }
+            SetFeedbackState(false);
 
             if (hypothesisText != null)
             {
@@ -162,10 +160,7 @@ public class VoiceInputEngineWhisper : BaseVoiceInputEngine
         string[] ignoreWords = { "you", "uh", "um", "ah", "mm" };
         if (ignoreWords.Contains(phrase))
         {
-            if (panelImage != null)
-            {
-                panelImage.sprite = invalid;
-            }
+            SetFeedbackState(false);
 
             if (hypothesisText != null)
             {
@@ -180,10 +175,7 @@ public class VoiceInputEngineWhisper : BaseVoiceInputEngine
 
         if (matchedCommand != null)
         {
-            if (panelImage != null)
-            {
-                panelImage.sprite = valid;
-            }
+            SetFeedbackState(true);
 
             if (hypothesisText != null)
             {
@@ -200,10 +192,7 @@ public class VoiceInputEngineWhisper : BaseVoiceInputEngine
         }
         else
         {
-            if (panelImage != null)
-            {
-                panelImage.sprite = invalid;
-            }
+            SetFeedbackState(false);
 
             if (hypothesisText != null)
             {
