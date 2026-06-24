@@ -3,6 +3,14 @@ using UnityEngine;
 
 public class Tracker
 {
+    private static readonly HashSet<string> AllowedEventTypes = new HashSet<string>
+    {
+        "session_start",
+        "session_end",
+        "voice_command_recognized",
+        "voice_command_not_recognized"
+    };
+
     public static Tracker Instance { get; private set; } = new Tracker();
 
     public ISerializer serializer;
@@ -37,6 +45,11 @@ public class Tracker
 
     public void TrackEvent(TrackerEvent eventToTrack)
     {
+        if (eventToTrack == null || !AllowedEventTypes.Contains(eventToTrack.eventName))
+        {
+            return;
+        }
+
         if (trackerMap[eventToTrack.trackerName])
         {
             persistence.Enqueue(eventToTrack);
@@ -51,7 +64,7 @@ public class Tracker
             { "session_id", sessionId }
         };
 
-        TrackEvent(new TrackerEvent(TelemetryEventType.SessionStart.ToString(), TelemetryTrackerEventType.ProgressionTracker.ToString(), data));
+        TrackEvent(new TrackerEvent("session_start", TelemetryTrackerEventType.ProgressionTracker.ToString(), data));
     }
 
     public void TrackSessionEndEvent(string sessionId)
@@ -61,7 +74,7 @@ public class Tracker
             { "session_id", sessionId }
         };
 
-        TrackEvent(new TrackerEvent(TelemetryEventType.SessionEnd.ToString(), TelemetryTrackerEventType.ProgressionTracker.ToString(), data));
+        TrackEvent(new TrackerEvent("session_end", TelemetryTrackerEventType.ProgressionTracker.ToString(), data));
     }
 
     public void TrackLevelStart(float levelId)

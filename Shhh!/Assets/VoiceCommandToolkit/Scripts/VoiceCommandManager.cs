@@ -117,17 +117,14 @@ public class VoiceCommandManager : MonoBehaviour
             try
             {
                 registeredCommand.Action.Execute(parameters);
-                TrackVoiceEvent("voice_command_executed", phrase, key, parameters, null);
             }
             catch (Exception e)
             {
-                TrackVoiceEvent("voice_command_execution_failed", phrase, key, parameters, e.Message);
                 Debug.LogError($"Error al ejecutar el comando '{phrase}': {e.Message}");
             }
         }
         else
         {
-            TrackVoiceEvent("voice_command_execution_failed", phrase, key, parameters, "command_not_registered");
             Debug.LogWarning($"Comando no reconocido: '{phrase}'");
         }
     }
@@ -190,30 +187,5 @@ public class VoiceCommandManager : MonoBehaviour
         {
             contextText.text = $"Context: {currentContext}";
         }
-    }
-
-    private void TrackVoiceEvent(string eventName, string phrase, string resolvedCommand, object[] parameters, string error)
-    {
-        if (Tracker.Instance == null || Tracker.Instance.persistence == null)
-        {
-            return;
-        }
-
-        var data = new Dictionary<string, object>
-        {
-            { "raw_phrase", phrase ?? string.Empty },
-            { "resolved_command", resolvedCommand ?? string.Empty },
-            { "parameter_count", parameters?.Length ?? 0 },
-            { "parameters", parameters == null ? Array.Empty<string>() : Array.ConvertAll(parameters, p => p?.ToString() ?? string.Empty) },
-            { "context", currentContext ?? string.Empty },
-            { "scene", UnityEngine.SceneManagement.SceneManager.GetActiveScene().name }
-        };
-
-        if (!string.IsNullOrEmpty(error))
-        {
-            data["error"] = error;
-        }
-
-        Tracker.Instance.TrackEvent(new TrackerEvent(eventName, "VoiceCommandTracker", data));
     }
 }

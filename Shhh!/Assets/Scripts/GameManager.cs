@@ -213,11 +213,6 @@ public class GameManager : MonoBehaviour
     {
         if (currentScene == scene) return;
 
-        if (!string.IsNullOrEmpty(currentScene) && IsTelemetryReady())
-        {
-            Tracker.Instance.TrackLevelEnd(SceneManager.GetActiveScene().buildIndex);
-        }
-
         SceneManager.LoadScene(scene);
         currentScene = scene;
         
@@ -234,11 +229,6 @@ public class GameManager : MonoBehaviour
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         EnsureTelemetrySessionStarted();
-
-        if (IsTelemetryReady())
-        {
-            Tracker.Instance.TrackLevelStart(scene.buildIndex);
-        }
 
         currentScene = scene.name;
 
