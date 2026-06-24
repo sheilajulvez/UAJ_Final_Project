@@ -13,6 +13,9 @@ public class VoiceInputEngineWindows : BaseVoiceInputEngine
 {
     private DictationRecognizer dictationRecognizer;
     private string[] commandsBase;
+    private string lastTelemetrySignature;
+    private float lastTelemetryTime;
+    private const float DuplicateTelemetryWindowSeconds = 1f;
 
     // Evento con comando y par�metros
     public override event Action<string, object[]> OnCommandRecognized;
@@ -113,8 +116,8 @@ public class VoiceInputEngineWindows : BaseVoiceInputEngine
         {
             hypothesisText.text = "Escuchando: " + text;
         }
-        // Llamamos al mismo m�todo que procesa el resultado,
-        // pero con un nivel de confianza medio para distinguir
+        // Algunas frases solo llegan como hipotesis. Se procesan aqui y la
+        // telemetria se filtra aparte si Windows repite el resultado final.
         DictationRecognizer_DictationResult(text, ConfidenceLevel.Medium);
     }
 
@@ -227,6 +230,19 @@ public class VoiceInputEngineWindows : BaseVoiceInputEngine
             { "context", context },
             { "scene", sceneName }
         };
+
+        string telemetrySignature =
+            $"{eventName}|{phrase ?? string.Empty}|{matchedCommand ?? string.Empty}|{context}|{sceneName}|{string.Join(" ", data["parameters"] as string[] ?? Array.Empty<string>())}";
+
+        if (string.Equals(telemetrySignature, lastTelemetrySignature, StringComparison.OrdinalIgnoreCase)
+            && Time.realtimeSinceStartup - lastTelemetryTime < DuplicateTelemetryWindowSeconds)
+        {
+            Debug.Log($"[VoiceInputEngine] Telemetria duplicada ignorada: '{eventName}' para '{phrase}'");
+            return;
+        }
+
+        lastTelemetrySignature = telemetrySignature;
+        lastTelemetryTime = Time.realtimeSinceStartup;
 
         Tracker.Instance.TrackEvent(new TrackerEvent(eventName, "VoiceCommandTracker", data));
     }
