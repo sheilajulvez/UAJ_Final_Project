@@ -52,7 +52,8 @@
             "Parameters": [],
             "Contexts": [
                 "CONTROLS",
-                "MICROPHONE"
+                "MICROPHONE",
+                "IN_GAME"
             ]
         },
         {
@@ -60,7 +61,8 @@
             "ActionClassName": "HelpAction",
             "Parameters": [],
             "Contexts": [
-                "MENU"
+                "MENU",
+                "IN_GAME"
             ]
         },
         {
